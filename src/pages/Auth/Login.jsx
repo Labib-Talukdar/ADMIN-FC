@@ -1,13 +1,10 @@
- 
 import axios from 'axios';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
- 
- 
+
 const Login = () => {
   const navigate = useNavigate();
- 
 
   const {
     register,
@@ -15,39 +12,10 @@ const Login = () => {
     formState: { errors },
   } = useForm();
 
-  // const onSubmit = async (data) => {
-  //   try {
-      
-  //     const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/admin-login`, data, {
-  //       withCredentials: true
-  //     });
-
-  //     if (response.data.success) {
-  //       // 🎯 ব্রাউজারের localStorage-এ ডাটা সেভ করা হচ্ছে
-  //       // ব্যাকএন্ড থেকে আসা টোকেনটি সেভ করুন (যদি ব্যাকএন্ড response.data.token পাঠায়)
-  //       if (response.data.token) {
-  //         localStorage.setItem("token", response.data.token);
-  //       } else {
-  //         // যদি টোকেন না পাঠিয়ে শুধু কুকি (HttpOnly Cookie) ব্যবহার করেন, তবে একটি ফ্ল্যাগ রাখতে পারেন
-  //         localStorage.setItem("token", "true"); 
-  //       }
-
-  //       // ইউজার অবজেক্ট এবং এডমিন রোল সেট করা হচ্ছে
-  //       // ব্যাকএন্ড থেকে ইউজার ডাটা আসলে response.data.user দিতে পারেন, অন্যথায় ম্যানুয়ালি:
-  //       localStorage.setItem("user", JSON.stringify({ role: "admin" }));
-
-  //       // সফলভাবে সেভ হওয়ার পর ড্যাশবোর্ডে রিডাইরেক্ট
-  //       navigate('/admin/dashboard/dashboard'); // আপনার রাউটার অনুযায়ী মূল ড্যাশবোর্ড পেজের পাথ
-  //     }
-  //   } catch (error) {
-  //     console.error("Login Failed:", error.response?.data?.message || error.message);
-  //     alert(error.response?.data?.message || "something went wrong");
-  //   }
-  // };
-
-
- const onSubmit = async (data) => {
+  const onSubmit = async (data) => {
     try {
+      console.log("কোথায় রিকোয়েস্ট যাচ্ছে: ", import.meta.env.VITE_API_URL);
+
       const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/admin-login`, data, {
         withCredentials: true
       });
@@ -57,42 +25,46 @@ const Login = () => {
         localStorage.setItem("user", JSON.stringify({ role: "admin" }));
         navigate('/admin/dashboard/dashboard'); 
       }
+    } catch (error) {
+      console.log(error.response?.data);
+      alert(error.response?.data?.message || "Login failed");
     }
-      catch (error) {
-  console.log(error.response?.data);
-  alert(error.response?.data?.message);
-}
   };
 
-
   return (
-    <div className="flex h-screen w-full items-center justify-center bg-[#022525] font-sans antialiased">
-      <div className="flex w-full max-w-4xl px-6 md:px-12">
+    <div className="flex min-h-screen w-full items-center justify-center bg-[#022525] font-sans antialiased py-10 md:py-0">
+      {/* 
+        Responsive Container: 
+        মোবাইলে flex-col (ওপর-নিচে) এবং ট্যাবলেটের পর থেকে flex-row (পাশাপাশি) হবে।
+      */}
+      <div className="flex w-full max-w-4xl flex-col items-center justify-center gap-8 px-6 md:flex-row md:gap-0 md:px-12">
         
-        {/* left logo and brand name */}
-        <div className="flex w-1/2 flex-col items-center justify-center pr-8 border-r border-gray-600/40">
+        {/* Left/Top Logo Box */}
+        {/* মোবাইলে পুরো চওড়া (w-full), ডেক্সটপে অর্ধেক (md:w-1/2) */}
+        <div className="flex w-full flex-col items-center justify-center pb-6 border-b border-gray-600/40 md:w-1/2 md:border-b-0 md:border-r md:pb-0 md:pr-8">
           <div className="flex items-center gap-4">
-            <div className="relative flex h-16 w-16 items-center justify-center rounded-tr-3xl rounded-bl-3xl bg-gradient-to-tr from-cyan-400 via-teal-500 to-orange-400 p-1 shadow-lg">
+            <div className="relative flex h-14 w-14 items-center justify-center rounded-tr-3xl rounded-bl-3xl bg-gradient-to-tr from-cyan-400 via-teal-500 to-orange-400 p-1 shadow-lg md:h-16 md:w-16">
               <div className="flex h-full w-full items-center justify-center rounded-tr-2xl rounded-bl-2xl bg-[#022525]"></div>
             </div>
-            <h1 className="text-3xl font-light tracking-wide text-white">
+            <h1 className="text-2xl font-light tracking-wide text-white md:text-3xl">
                Fashion Classy
             </h1>
           </div>
         </div>
 
-        {/* login form */}
-        <div className="flex w-1/2 flex-col justify-center pl-12 text-center">
-          <h2 className="text-4xl font-light tracking-wider text-white mb-2">
+        {/* Right/Bottom Login Form */}
+        {/* মোবাইলে প্যাডিং অ্যাডজাস্ট করা হয়েছে (pl-0 থেকে md:pl-12) */}
+        <div className="flex w-full flex-col justify-center pl-0 text-center md:w-1/2 md:pl-12">
+          <h2 className="text-3xl font-light tracking-wider text-white mb-2 md:text-4xl">
             Welcome
           </h2>
-          <p className="text-xs uppercase tracking-widest text-gray-400 mb-8 font-medium">
+          <p className="text-[10px] uppercase tracking-widest text-gray-400 mb-6 font-medium md:text-xs md:mb-8">
             Please login to Admin Dashboard.
           </p>
 
           <form onSubmit={handleSubmit(onSubmit)} className="mx-auto w-full max-w-sm space-y-4">
             
-            {/* Email input filed */}
+            {/* Email input field */}
             <div>
               <input
                 type="email"
@@ -113,7 +85,7 @@ const Login = () => {
               )}
             </div>
 
-            {/* password input filed*/}
+            {/* Password input field */}
             <div>
               <input
                 type="password"
@@ -134,7 +106,7 @@ const Login = () => {
               )}
             </div>
 
-            {/* login button */}
+            {/* Login button */}
             <div className="pt-2">
               <button
                 type="submit"
@@ -145,7 +117,7 @@ const Login = () => {
             </div>
           </form>
 
-          {/* forgat password*/}
+          {/* Forgot password */}
           <div className="mt-6">
             <a
               href="#forgot-password"
