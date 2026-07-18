@@ -58,6 +58,7 @@ const Login = () => {
         navigate('/admin/dashboard/dashboard'); 
       }
     } catch (error) {
+      console.error(error);
       alert("Login Failed");
     }
   };
