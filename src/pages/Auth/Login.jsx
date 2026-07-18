@@ -15,35 +15,60 @@ const Login = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = async (data) => {
-    try {
+  // const onSubmit = async (data) => {
+  //   try {
       
+  //     const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/admin-login`, data, {
+  //       withCredentials: true
+  //     });
+
+  //     if (response.data.success) {
+  //       // 🎯 ব্রাউজারের localStorage-এ ডাটা সেভ করা হচ্ছে
+  //       // ব্যাকএন্ড থেকে আসা টোকেনটি সেভ করুন (যদি ব্যাকএন্ড response.data.token পাঠায়)
+  //       if (response.data.token) {
+  //         localStorage.setItem("token", response.data.token);
+  //       } else {
+  //         // যদি টোকেন না পাঠিয়ে শুধু কুকি (HttpOnly Cookie) ব্যবহার করেন, তবে একটি ফ্ল্যাগ রাখতে পারেন
+  //         localStorage.setItem("token", "true"); 
+  //       }
+
+  //       // ইউজার অবজেক্ট এবং এডমিন রোল সেট করা হচ্ছে
+  //       // ব্যাকএন্ড থেকে ইউজার ডাটা আসলে response.data.user দিতে পারেন, অন্যথায় ম্যানুয়ালি:
+  //       localStorage.setItem("user", JSON.stringify({ role: "admin" }));
+
+  //       // সফলভাবে সেভ হওয়ার পর ড্যাশবোর্ডে রিডাইরেক্ট
+  //       navigate('/admin/dashboard/dashboard'); // আপনার রাউটার অনুযায়ী মূল ড্যাশবোর্ড পেজের পাথ
+  //     }
+  //   } catch (error) {
+  //     console.error("Login Failed:", error.response?.data?.message || error.message);
+  //     alert(error.response?.data?.message || "something went wrong");
+  //   }
+  // };
+
+
+const onSubmit = async (data) => {
+    try {
+      // 🎯 শুধু এই একটা লাইভ এপিআই রিকোয়েস্ট থাকবে, ডুপ্লিকেট সব ডিলিট
       const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/admin-login`, data, {
         withCredentials: true
       });
 
       if (response.data.success) {
-        // 🎯 ব্রাউজারের localStorage-এ ডাটা সেভ করা হচ্ছে
-        // ব্যাকএন্ড থেকে আসা টোকেনটি সেভ করুন (যদি ব্যাকএন্ড response.data.token পাঠায়)
         if (response.data.token) {
           localStorage.setItem("token", response.data.token);
         } else {
-          // যদি টোকেন না পাঠিয়ে শুধু কুকি (HttpOnly Cookie) ব্যবহার করেন, তবে একটি ফ্ল্যাগ রাখতে পারেন
           localStorage.setItem("token", "true"); 
         }
 
-        // ইউজার অবজেক্ট এবং এডমিন রোল সেট করা হচ্ছে
-        // ব্যাকএন্ড থেকে ইউজার ডাটা আসলে response.data.user দিতে পারেন, অন্যথায় ম্যানুয়ালি:
         localStorage.setItem("user", JSON.stringify({ role: "admin" }));
-
-        // সফলভাবে সেভ হওয়ার পর ড্যাশবোর্ডে রিডাইরেক্ট
-        navigate('/admin/dashboard/dashboard'); // আপনার রাউটার অনুযায়ী মূল ড্যাশবোর্ড পেজের পাথ
+        navigate('/admin/dashboard/dashboard'); 
       }
     } catch (error) {
       console.error("Login Failed:", error.response?.data?.message || error.message);
-      alert(error.response?.data?.message || "something went wrong");
+      alert(error.response?.data?.message || "Something went wrong");
     }
   };
+
 
   return (
     <div className="flex h-screen w-full items-center justify-center bg-[#022525] font-sans antialiased">
