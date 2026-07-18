@@ -164,27 +164,17 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+ 
 
 import axios from 'axios';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
  
+ 
 const Login = () => {
   const navigate = useNavigate();
+ 
 
   const {
     register,
@@ -194,9 +184,10 @@ const Login = () => {
 
   const onSubmit = async (data) => {
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/admin-login', data, {
-        withCredentials: true
-      });
+      // const response = await axios.post('http://localhost:5000/api/auth/admin-login',
+       const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/admin-login`, data, {
+  withCredentials: true
+});
 
       if (response.data.success) {
         // 🎯 ব্রাউজারের localStorage-এ ডাটা সেভ করা হচ্ছে
