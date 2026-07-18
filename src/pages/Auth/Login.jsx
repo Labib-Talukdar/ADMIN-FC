@@ -57,10 +57,11 @@ const Login = () => {
         localStorage.setItem("user", JSON.stringify({ role: "admin" }));
         navigate('/admin/dashboard/dashboard'); 
       }
-    } catch (error) {
-      console.error(error);
-      alert("Login Failed");
     }
+      catch (error) {
+  console.log(error.response?.data);
+  alert(error.response?.data?.message);
+}
   };
 
 
