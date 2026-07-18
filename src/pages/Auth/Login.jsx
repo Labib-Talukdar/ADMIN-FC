@@ -46,26 +46,19 @@ const Login = () => {
   // };
 
 
-const onSubmit = async (data) => {
+ const onSubmit = async (data) => {
     try {
-      // 🎯 শুধু এই একটা লাইভ এপিআই রিকোয়েস্ট থাকবে, ডুপ্লিকেট সব ডিলিট
       const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/admin-login`, data, {
         withCredentials: true
       });
 
       if (response.data.success) {
-        if (response.data.token) {
-          localStorage.setItem("token", response.data.token);
-        } else {
-          localStorage.setItem("token", "true"); 
-        }
-
+        localStorage.setItem("token", response.data.token || "true");
         localStorage.setItem("user", JSON.stringify({ role: "admin" }));
         navigate('/admin/dashboard/dashboard'); 
       }
     } catch (error) {
-      console.error("Login Failed:", error.response?.data?.message || error.message);
-      alert(error.response?.data?.message || "Something went wrong");
+      alert("Login Failed");
     }
   };
 
