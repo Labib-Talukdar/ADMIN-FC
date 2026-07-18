@@ -10,7 +10,6 @@ import Navbar from "../components/navbar/Navbar";
 import Categories from "../pages/Dashboard/Categories";
 import AddProduct from "../pages/Dashboard/AddProduct";
 import EditProduct from "../pages/Dashboard/EditProduct";
-import DeleteProduct from "../pages/Dashboard/DeleteProduct";
  
 
 const router = createBrowserRouter([
