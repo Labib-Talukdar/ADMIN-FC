@@ -1,5 +1,5 @@
 import React from 'react';
-import Bot from '../pages/bot/bot';
+import Bot from '../pages/bot/Bot';
 
 const MainLayout = () => {
     return (
