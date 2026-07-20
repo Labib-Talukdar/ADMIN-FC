@@ -1,330 +1,4 @@
-// import React, { useEffect, useState } from "react";
-// import { Link } from "react-router-dom";
-// import API from "../../api"; 
-// import { 
-//   HiOutlineShoppingBag, 
-//   HiOutlineCurrencyBangladeshi, 
-//   HiOutlineClipboardDocumentList, 
-//   HiOutlineFolderOpen,
-//   HiOutlinePlus,
-//   HiOutlineArrowRight
-// } from "react-icons/hi2";
-
-// const Dashboard = () => {
-//   const [stats, setStats] = useState({
-//     totalSales: 0,
-//     totalOrders: 0,
-//     totalProducts: 0,
-//     totalCategories: 0,
-//   });
-//   const [recentOrders, setRecentOrders] = useState([]);
-//   const [loading, setLoading] = useState(true);
-
-//   // ব্যাকএন্ড থেকে ডাটা নিরাপদে এক্সট্র্যাক্ট করার হেলপার ফাংশন
-//   const extractArrayData = (res) => {
-//     if (!res) return [];
-//     if (Array.isArray(res)) return res;
-//     if (Array.isArray(res.data)) return res.data;
-//     if (res.data?.orders && Array.isArray(res.data.orders)) return res.data.orders;
-//     if (res.data?.products && Array.isArray(res.data.products)) return res.data.products;
-//     if (res.data?.categories && Array.isArray(res.data.categories)) return res.data.categories;
-//     if (res.data?.data && Array.isArray(res.data.data)) return res.data.data;
-//     return [];
-//   };
-
-//   const fetchDashboardData = async () => {
-//     try {
-//       setLoading(true);
-
-//       // ব্যাকএন্ড API থেকে অর্ডারের ডাটা আনা
-//       let orders = [];
-//       try {
-//         const ordersRes = await API.get("/api/orders/all");
-//         orders = extractArrayData(ordersRes);
-//       } catch (err) {
-//         console.error("Orders Fetch Error:", err);
-//       }
-
-//       // ব্যাকএন্ড API থেকে প্রোডাক্টের ডাটা আনা
-//       let products = [];
-//       try {
-//         const productsRes = await API.get("/api/products");
-//         products = extractArrayData(productsRes);
-//       } catch (err) {
-//         console.error("Products Fetch Error:", err);
-//       }
-
-//       // ব্যাকএন্ড API থেকে ক্যাটাগরির ডাটা আনা
-//       let categories = [];
-//       try {
-//         const categoriesRes = await API.get("/api/categories");
-//         categories = extractArrayData(categoriesRes);
-//       } catch (err) {
-//         console.error("Categories Fetch Error:", err);
-//       }
-
-//       // ১. সেলস হিসাব করা (orders যদি safe array হয়)
-//       const totalSalesAmount = Array.isArray(orders) 
-//         ? orders.reduce((sum, order) => {
-//             const amount = Number(order?.grandTotal) || Number(order?.totalAmount) || 0;
-//             return sum + amount;
-//           }, 0)
-//         : 0;
-
-//       // ২. স্ট্যাটস আপডেট (ক্যাটাগরি ৮টা থাকলে ৮, নতুন যোগ করলে অটোমেটিক বাড়বে)
-//       setStats({
-//         totalSales: totalSalesAmount,
-//         totalOrders: Array.isArray(orders) ? orders.length : 0,
-//         totalProducts: Array.isArray(products) ? products.length : 0,
-//         totalCategories: Array.isArray(categories) ? categories.length : 0,
-//       });
-
-//       // ৩. সাম্প্রতিক ৫টি অর্ডার
-//       if (Array.isArray(orders)) {
-//         setRecentOrders(orders.slice(0, 5));
-//       }
-
-//     } catch (error) {
-//       console.error("Dashboard Main Fetch Error:", error);
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   useEffect(() => {
-//     fetchDashboardData();
-//   }, []);
-
-//   if (loading) {
-//     return (
-//       <div className="flex justify-center items-center min-h-[50vh]">
-//         <div className="text-yellow-600 font-bold text-lg animate-pulse">
-//           Loading Dashboard...
-//         </div>
-//       </div>
-//     );
-//   }
-
-//   return (
-//     <div className="p-4 sm:p-6 lg:p-8 max-w-[1600px] mx-auto font-sans space-y-8">
-      
-//       {/* হেডার সেকশন */}
-//       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-//         <div>
-//           <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold uppercase tracking-wider text-gray-900">
-//             Fashion <span className="text-pink-600 font-light">Classy</span> Overview
-//           </h1>
-//           <p className="text-xs sm:text-sm text-gray-500 mt-1">
-//             Welcome back! Here is what's happening with your store today.
-//           </p>
-//         </div>
-
-//         {/* কুইক অ্যাকশন বাটন */}
-//         <Link 
-//           to="/admin/dashboard/add-product"
-//           className="flex items-center gap-2 bg-black text-white text-xs sm:text-sm uppercase font-semibold px-4 py-2.5 rounded-xl hover:bg-gray-800 transition-all shadow-sm active:scale-95"
-//         >
-//           <HiOutlinePlus className="w-4 h-4" />
-//           <span>Add New Product</span>
-//         </Link>
-//       </div>
-
-//       {/* ১. প্রধান ৪টি স্ট্যাটস কার্ড */}
-//       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        
-//         {/* মোট বিক্রি */}
-//         <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex items-center justify-between hover:shadow-md transition-shadow">
-//           <div>
-//             <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Total Sales</p>
-//             <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mt-1">
-//               Tk. {stats.totalSales.toLocaleString()}
-//             </h3>
-//           </div>
-//           <div className="p-3.5 bg-amber-50 text-yellow-600 rounded-2xl">
-//             <HiOutlineCurrencyBangladeshi className="w-7 h-7" />
-//           </div>
-//         </div>
-
-//         {/* মোট অর্ডার */}
-//         <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex items-center justify-between hover:shadow-md transition-shadow">
-//           <div>
-//             <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Total Orders</p>
-//             <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mt-1">
-//               {stats.totalOrders}
-//             </h3>
-//           </div>
-//           <div className="p-3.5 bg-amber-50 text-yellow-600 rounded-2xl">
-//             <HiOutlineClipboardDocumentList className="w-7 h-7" />
-//           </div>
-//         </div>
-
-//         {/* মোট প্রোডাক্ট */}
-//         <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex items-center justify-between hover:shadow-md transition-shadow">
-//           <div>
-//             <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Total Products</p>
-//             <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mt-1">
-//               {stats.totalProducts}
-//             </h3>
-//           </div>
-//           <div className="p-3.5 bg-amber-50 text-yellow-600 rounded-2xl">
-//             <HiOutlineShoppingBag className="w-7 h-7" />
-//           </div>
-//         </div>
-
-//         {/* ক্যাটাগরি (ডাইনামিক কাউন্ট) */}
-//         <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex items-center justify-between hover:shadow-md transition-shadow">
-//           <div>
-//             <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Categories</p>
-//             <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mt-1">
-//               {stats.totalCategories}
-//             </h3>
-//           </div>
-//           <div className="p-3.5 bg-amber-50 text-yellow-600 rounded-2xl">
-//             <HiOutlineFolderOpen className="w-7 h-7" />
-//           </div>
-//         </div>
-
-//       </div>
-
-//       {/* ২. সাম্প্রতিক অর্ডার টেবিল */}
-//       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 sm:p-6 space-y-4">
-//         <div className="flex justify-between items-center">
-//           <div>
-//             <h2 className="text-lg font-bold text-gray-900 uppercase tracking-wide">
-//               Recent Customer Orders
-//             </h2>
-//             <p className="text-xs text-gray-500">Latest 5 orders placed by clients</p>
-//           </div>
-//           <Link 
-//             to="/admin/dashboard/orders" 
-//             className="flex items-center gap-1.5 text-xs sm:text-sm font-bold text-yellow-600 hover:text-yellow-700 transition-colors"
-//           >
-//             <span>View All Orders</span>
-//             <HiOutlineArrowRight className="w-4 h-4" />
-//           </Link>
-//         </div>
-
-//         {recentOrders.length === 0 ? (
-//           <div className="text-center py-8 text-gray-400 text-sm">
-//             এখনো কোনো সাম্প্রতিক অর্ডার নেই।
-//           </div>
-//         ) : (
-//           <div className="overflow-x-auto">
-//             <table className="w-full text-left border-collapse">
-//               <thead>
-//                 <tr className="border-b border-gray-100 text-xs uppercase text-gray-400 font-semibold">
-//                   <th className="pb-3 pl-2">Customer</th>
-//                   <th className="pb-3">Phone</th>
-//                   <th className="pb-3">Payment</th>
-//                   <th className="pb-3">Total Amount</th>
-//                   <th className="pb-3 pr-2 text-right">Date</th>
-//                 </tr>
-//               </thead>
-//               <tbody className="divide-y divide-gray-50 text-sm text-gray-700">
-//                 {recentOrders.map((order) => (
-//                   <tr key={order._id} className="hover:bg-amber-50/30 transition-colors">
-//                     <td className="py-3.5 pl-2 font-bold text-gray-900">
-//                       {order.customer?.fullName || "N/A"}
-//                     </td>
-//                     <td className="py-3.5 font-medium text-gray-600">
-//                       {order.customer?.phone || "N/A"}
-//                     </td>
-//                     <td className="py-3.5">
-//                       <span className={`inline-block text-[11px] font-semibold px-2.5 py-0.5 rounded-full uppercase ${
-//                         order.customer?.paymentMethod === 'cod' 
-//                           ? 'bg-amber-100 text-amber-800' 
-//                           : 'bg-green-100 text-green-800'
-//                       }`}>
-//                         {order.customer?.paymentMethod === 'cod' ? 'COD' : 'Direct'}
-//                       </span>
-//                     </td>
-//                     <td className="py-3.5 font-bold text-black">
-//                       Tk. {order.grandTotal || order.totalAmount || 0}
-//                     </td>
-//                     <td className="py-3.5 pr-2 text-right text-xs text-gray-400 whitespace-nowrap">
-//                       {order.createdAt ? new Date(order.createdAt).toLocaleDateString('en-GB', {
-//                         day: 'numeric',
-//                         month: 'short'
-//                       }) : 'N/A'}
-//                     </td>
-//                   </tr>
-//                 ))}
-//               </tbody>
-//             </table>
-//           </div>
-//         )}
-//       </div>
-
-//     </div>
-//   );
-// };
-
-// export default Dashboard;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+ 
 
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -365,6 +39,38 @@ const Dashboard = () => {
     if (res.data?.data && Array.isArray(res.data.data)) return res.data.data;
     return [];
   };
+
+
+// সাউন্ড নোটিফিকেশনের ফাংশন
+const playNotificationSound = () => {
+  const audio = new Audio("https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3"); // নোটিফিকেশন সাউন্ডের ইউআরএল
+  audio.play().catch(err => console.log("Audio play blocked by browser:", err));
+};
+
+// Polling দিয়ে নতুন অর্ডার চেক করা
+useEffect(() => {
+  const interval = setInterval(async () => {
+    try {
+      const res = await API.get("/api/orders/all");
+      const latestOrders = res.data || [];
+      
+      // যদি আগে থাকা অর্ডারের চেয়ে ব্যাকএন্ডের অর্ডার বেশি হয়
+      if (latestOrders.length > stats.totalOrders && stats.totalOrders > 0) {
+        playNotificationSound();
+        alert("🔔 New Order Received!"); // অথবা Toast Notification
+        fetchDashboardData(); // ড্যাশবোর্ডের ডাটা রিফ্রেশ
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }, 15000); // প্রতি ১৫ সেকেন্ড পর পর চেক করবে
+
+  return () => clearInterval(interval);
+}, [stats.totalOrders]);
+
+
+
+  
 
   const fetchDashboardData = async () => {
     try {
