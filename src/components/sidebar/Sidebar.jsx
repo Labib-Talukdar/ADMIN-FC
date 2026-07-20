@@ -18,7 +18,7 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
   // সাধারণ মেনু আইটেমসমূহ
   const menuItems = [
     { name: "Categories", path: "categories", icon: <HiOutlineFolderOpen className="w-5 h-5" /> },
-    { name: "Orders", path: "/dashboard/orders", icon: <HiOutlineClipboardDocumentList className="w-5 h-5" /> },
+    { name: "Orders", path: "orders", icon: <HiOutlineClipboardDocumentList className="w-5 h-5" /> },
     { name: "Users/Customers", path: "/dashboard/users", icon: <HiOutlineUsers className="w-5 h-5" /> },
     { name: "Coupons", path: "/dashboard/coupons", icon: <HiOutlineTicket className="w-5 h-5" /> },
   ];

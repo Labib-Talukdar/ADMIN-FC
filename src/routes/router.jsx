@@ -195,6 +195,7 @@ import EditProduct from "../pages/Dashboard/EditProduct";
 
 import Sidebar from "../components/sidebar/Sidebar";
 import Navbar from "../components/navbar/Navbar";
+import Orders from "../pages/orders/Orders";
 
 // 🔒 Protected Route
 const ProtectedRoute = () => {
@@ -250,6 +251,10 @@ const router = createBrowserRouter([
             element: <EditProduct />,
           },
           {
+            path: "orders", 
+            element: <Orders />,
+          },
+          {
             path: "sidebar",
             element: <Sidebar />,
           },
@@ -257,10 +262,13 @@ const router = createBrowserRouter([
             path: "navbar",
             element: <Navbar />,
           },
+
         ],
       },
     ],
   },
+
+ 
 
   // ❌ সব ভুল URL এখানে আসবে
   {
