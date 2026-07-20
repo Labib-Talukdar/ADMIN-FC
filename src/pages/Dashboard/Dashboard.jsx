@@ -40,12 +40,7 @@ const Dashboard = () => {
     return [];
   };
 
-
-// সাউন্ড নোটিফিকেশনের ফাংশন
-const playNotificationSound = () => {
-  const audio = new Audio("https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3"); // নোটিফিকেশন সাউন্ডের ইউআরএল
-  audio.play().catch(err => console.log("Audio play blocked by browser:", err));
-};
+ 
 
 // Polling দিয়ে নতুন অর্ডার চেক করা
 useEffect(() => {
