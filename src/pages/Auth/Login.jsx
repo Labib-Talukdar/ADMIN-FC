@@ -14,7 +14,8 @@ const Login = () => {
 
   const onSubmit = async (data) => {
     try {
-      console.log("কোথায় রিকোয়েস্ট যাচ্ছে: ", import.meta.env.VITE_API_URL);
+      const BASE_URL = import.meta.env.VITE_API_URL || "https://fc-server-side.onrender.com";
+      console.log("কোথায় রিকোয়েস্ট যাচ্ছে: ",BASE_URL);
 
       const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/admin-login`, data, {
         withCredentials: true
