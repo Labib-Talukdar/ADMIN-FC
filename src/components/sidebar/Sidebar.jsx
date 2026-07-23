@@ -54,7 +54,7 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
         {/* ব্র্যান্ড লোগো */}
         <div className="flex items-center justify-between pb-6 mb-6 border-b border-gray-100">
           <Link to="/" className="text-xl font-bold text-gray-900 tracking-wider uppercase">
-            Zaara <span className="text-pink-600 font-light">Closet</span>
+            Fashion <span className="text-pink-600 font-light">Classy</span>
           </Link>
           <button 
             className="md:hidden text-gray-500 hover:text-gray-800 transition-colors" 

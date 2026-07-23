@@ -1,249 +1,3 @@
- 
-
-// import React, { useState, useEffect } from "react";
-// import { useParams, useNavigate } from "react-router-dom";
-// import axios from "axios";
-
-// const EditProduct = () => {
-//   const { id } = useParams();
-//   const navigate = useNavigate();
-  
-//   // 🎯 আইডি ট্র্যাক করার জন্য নতুন স্টেট (যদি ইউআরএল এ আইডি না থাকে)
-//   const [searchId, setSearchId] = useState(id || "");
-//   const [loading, setLoading] = useState(false);
-
-//   // প্রোডাক্টের বাকি সব স্টেট
-//   const [title, setTitle] = useState("");
-//   const [sku, setSku] = useState("");
-//   const [price, setPrice] = useState("");
-//   const [category, setCategory] = useState("");
-//   const [fabric, setFabric] = useState("");
-//   const [inStock, setInStock] = useState(true);
-//   const [selectedSizes, setSelectedSizes] = useState([]);
-//   const [selectedColors, setSelectedColors] = useState([]);
-//   const [mainImage, setMainImage] = useState(null);
-//   const [existingImage, setExistingImage] = useState("");
-
-//   const availableSizes = ["XS", "S", "M", "L", "XL"];
-//   const availableColors = ["Red", "Emerald Green", "Maroon", "Navy Blue", "Black", "White"];
-
-//   // 🎯 ডাটা ফেচ করার মূল ফাংশন
-//   const fetchProductData = async (productId) => {
-//     if (!productId) return;
-//     setLoading(true);
-//     try {
-//       const response = await axios.get(`http://localhost:5000/api/products/single/${productId}`);
-//       console.log("Backend Response:", response.data);
-//       const product = response.data.data || response.data;
-
-//       if (product) {
-//         setTitle(product.title);
-//         setSku(product.sku);
-//         setPrice(product.price);
-//         setCategory(product.category);
-//         setFabric(product.fabric);
-//         setInStock(product.inStock !== undefined ? product.inStock : true);
-//         setSelectedSizes(product.sizes || []);
-//         setSelectedColors(product.colors || []);
-//         setExistingImage(product.mainImage);
-//       }
-//     } catch (error) {
-//       console.error(error);
-//       alert("Product not found! Please check the ID.");
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   // যদি ইউআরএল এ সরাসরি আইডি থাকে (যেমন: /product/edit/123)
-//   useEffect(() => {
-//     if (id) {
-//       fetchProductData(id);
-//     }
-//   }, [id]);
-
-//  // ম্যানুয়ালি আইডি সার্চ করার হ্যান্ডলার
-// const handleSearchSubmit = (e) => {
-//   e.preventDefault();
-//   if (searchId.trim()) {
-//     // 🎯 এটি এখন আমাদের নতুন রাউটের সাথে পারফেক্টলি ম্যাচ করবে
-//     navigate(`/admin/dashboard/edit-product/${searchId.trim()}`); 
-//     fetchProductData(searchId.trim());
-//   }
-// };
-
-//   // বাকি হ্যান্ডলারগুলো (Size, Color, Submit) আগের মতোই থাকবে...
-//   const handleSizeChange = (size) => {
-//     setSelectedSizes(prev => prev.includes(size) ? prev.filter(s => s !== size) : [...prev, size]);
-//   };
-
-//   const handleColorChange = (color) => {
-//     setSelectedColors(prev => prev.includes(color) ? prev.filter(c => c !== color) : [...prev, color]);
-//   };
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-//     const formData = new FormData();
-//     formData.append("title", title);
-//     formData.append("sku", sku);
-//     formData.append("price", price);
-//     formData.append("category", category);
-//     formData.append("fabric", fabric);
-//     formData.append("inStock", inStock);
-//     formData.append("sizes", JSON.stringify(selectedSizes));
-//     formData.append("colors", JSON.stringify(selectedColors));
-//     if (mainImage) formData.append("mainImage", mainImage);
-
-//     try {
-//       const targetId = id || searchId;
-//       const res = await axios.put(`http://localhost:5000/api/products/update/${targetId}`, formData, {
-//         headers: { "Content-Type": "multipart/form-data" }
-//       });
-//       if (res.data.success) {
-//         alert("Product updated successfully! 🎉");
-//       }
-//     } catch (error) {
-//       alert("Something went wrong while updating.");
-//     }
-//   };
-
-//   return (
-//     <div className="max-w-3xl mx-auto px-4 py-12 font-sans text-neutral-900 mt-10">
-      
-//       {/* 🎯 ১. কুইক আইডি সার্চ বার (যেহেতু আলাদা ফাইল নেই) */}
-//       <div className="mb-10 border border-dashed border-gray-300 p-4 bg-gray-50 rounded">
-//         <form onSubmit={handleSearchSubmit} className="flex gap-2">
-//           <input 
-//             type="text" 
-//             placeholder="Paste Product ID here to edit..." 
-//             value={searchId}
-//             onChange={(e) => setSearchId(e.target.value)}
-//             className="flex-1 border border-gray-300 px-3 py-2 text-sm outline-none focus:border-black"
-//           />
-//           <button type="submit" className="bg-black text-white px-5 py-2 text-sm uppercase tracking-wider">
-//             Load Product
-//           </button>
-//         </form>
-//       </div>
-
-//       <h1 className="text-2xl font-light tracking-widest uppercase text-center mb-10">Edit Product Panel</h1>
-      
-//       {loading ? (
-//         <div className="text-center py-10 text-gray-500">Fetching Product Details...</div>
-//       ) : (
-//         <form onSubmit={handleSubmit} className="space-y-6 border border-gray-100 p-8 bg-white shadow-sm">
-//           {/* বাকি সব ইনপুট ফিল্ড (Title, Price, Stock Status, Size, Color) আগের কোডের মতো নিচে বসে যাবে */}
-//           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-//             <div>
-//               <label className="block text-xs uppercase tracking-wider text-gray-500 mb-1">Product Title</label>
-//               <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required className="w-full border border-gray-200 px-4 py-2.5 text-sm focus:border-black outline-none" />
-//             </div>
-//             <div>
-//               <label className="block text-xs uppercase tracking-wider text-gray-500 mb-1">SKU</label>
-//               <input type="text" value={sku} onChange={(e) => setSku(e.target.value)} required className="w-full border border-gray-200 px-4 py-2.5 text-sm focus:border-black outline-none" />
-//             </div>
-//           </div>
-
-//           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-//             <div>
-//               <label className="block text-xs uppercase tracking-wider text-gray-500 mb-1">Price</label>
-//               <input type="number" value={price} onChange={(e) => setPrice(e.target.value)} required className="w-full border border-gray-200 px-4 py-2.5 text-sm focus:border-black outline-none" />
-//             </div>
-//             <div>
-//               <label className="block text-xs uppercase tracking-wider text-gray-500 mb-1">Category</label>
-//               <input type="text" value={category} onChange={(e) => setCategory(e.target.value)} required className="w-full border border-gray-200 px-4 py-2.5 text-sm focus:border-black outline-none" />
-//             </div>
-//           </div>
-
-//           <div>
-//             <label className="block text-xs uppercase tracking-wider text-gray-500 mb-2">Stock Availability</label>
-//             <select value={inStock} onChange={(e) => setInStock(e.target.value === "true")} className="w-full border border-gray-200 px-4 py-2.5 text-sm bg-white focus:border-black outline-none">
-//               <option value="true">🟢 In Stock (Available)</option>
-//               <option value="false">🔴 Out of Stock (Sold Out)</option>
-//             </select>
-//           </div>
-
-//           <div>
-//             <label className="block text-xs uppercase tracking-wider text-gray-500 mb-2">Available Sizes</label>
-//             <div className="flex flex-wrap gap-4">
-//               {availableSizes.map(size => (
-//                 <label key={size} className="flex items-center gap-2 text-sm cursor-pointer">
-//                   <input type="checkbox" checked={selectedSizes.includes(size)} onChange={() => handleSizeChange(size)} className="accent-black" />
-//                   {size}
-//                 </label>
-//               ))}
-//             </div>
-//           </div>
-
-//           <div>
-//             <label className="block text-xs uppercase tracking-wider text-gray-500 mb-2">Available Colors</label>
-//             <div className="flex flex-wrap gap-4">
-//               {availableColors.map(color => (
-//                 <label key={color} className="flex items-center gap-2 text-sm cursor-pointer">
-//                   <input type="checkbox" checked={selectedColors.includes(color)} onChange={() => handleColorChange(color)} className="accent-black" />
-//                   {color}
-//                 </label>
-//               ))}
-//             </div>
-//           </div>
-
-//           <div>
-//             <label className="block text-xs uppercase tracking-wider text-gray-500 mb-1">Product Main Image</label>
-//             {existingImage && <p className="text-xs text-gray-400 mb-2">Current: {existingImage}</p>}
-//             <input type="file" onChange={(e) => setMainImage(e.target.files[0])} className="text-sm" />
-//           </div>
-
-//           <div className="pt-4">
-//             <button type="submit" className="w-full bg-neutral-950 text-white text-xs tracking-[0.2em] uppercase py-4 font-medium hover:bg-black transition-colors">
-//               Update Product
-//             </button>
-//           </div>
-//         </form>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default EditProduct;
-
-
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -251,12 +5,19 @@ import axios from "axios";
 const EditProduct = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  
+
+  // BASE URL Config
+  const BASE_URL = import.meta.env.VITE_API_URL || "https://fc-server-side.onrender.com";
+
+  // Search & Loading States
   const [searchId, setSearchId] = useState(id || "");
   const [loading, setLoading] = useState(false);
+  const [actionLoading, setActionLoading] = useState(false); // Update/Delete Loading
 
+  // 🎯 ১. currentProductId স্টেট (যা মিসিং থাকার কারণে ReferenceError আসছিল)
+  const [currentProductId, setCurrentProductId] = useState(id || "");
 
-  // প্রোডাক্টের স্টেটগুলো
+  // Form Field States
   const [title, setTitle] = useState("");
   const [sku, setSku] = useState("");
   const [price, setPrice] = useState("");
@@ -271,8 +32,9 @@ const EditProduct = () => {
   const availableSizes = ["XS", "S", "M", "L", "XL"];
   const availableColors = ["Red", "Emerald Green", "Maroon", "Navy Blue", "Black", "White"];
 
-  // ফর্ম ফিল্ডগুলো পূরণ করার কমন ফাংশন
+  // 🎯 ২. ফর্মে ডাটা ফিল করার হেলপার ফাংশন
   const fillFormFields = (product) => {
+    setCurrentProductId(product._id); // আসল মঙ্গোডিবি _id সেট হচ্ছে
     setTitle(product.title || "");
     setSku(product.sku || "");
     setPrice(product.price || "");
@@ -284,69 +46,38 @@ const EditProduct = () => {
     setExistingImage(product.mainImage || "");
   };
 
-  // 🎯 ডাটা ফেচ করার স্মার্ট ফাংশন (ID এবং SKU দুইটাই হ্যান্ডেল করবে)
+  // 🎯 ৩. প্রোডাক্ট ডাটা লোড করার ফাংশন (ID বা SKU দুইটাই সাপোর্ট করবে)
   const fetchProductData = async (inputKey) => {
     if (!inputKey) return;
     setLoading(true);
     try {
-      // চেক করছি ইনপুটটি কি ২৪ ডিজিটের মঙ্গোডিবি আইডি কি না
       const isMongoDBId = /^[0-9a-fA-F]{24}$/.test(inputKey);
 
       if (isMongoDBId) {
-        // ১. ২৪ ডিজিটের আইডি হলে সরাসরি সিঙ্গেল প্রোডাক্ট রাউটে হিট করবে
-        const response = await axios.get(`http://localhost:5000/api/products/single/${inputKey}`);
+        const response = await axios.get(`${BASE_URL}/api/products/single/${inputKey}`);
         const product = response.data.data || response.data.product || response.data;
         if (product) fillFormFields(product);
       } else {
-        // 🚀 ২. ২৪ ডিজিট না হলে (যেমন SKU), সব প্রোডাক্ট এনে ফিল্টার করবে
-        const response = await axios.get(`http://localhost:5000/api/products`);
-        const allProducts = response.data.data || response.data.products || response.data;
-        
-        // SKU এর সাথে ম্যাচ করানো (কেস ইনসেনসিটিভ)
+        const response = await axios.get(`${BASE_URL}/api/products`);
+        const allProducts = response.data.data || response.data.products || response.data || [];
+
         const matchedProduct = allProducts.find(
           (p) => p.sku?.toString().trim().toLowerCase() === inputKey.trim().toLowerCase()
         );
 
         if (matchedProduct) {
           fillFormFields(matchedProduct);
-          // ইউআরএলটি ওই প্রোডাক্টের আসল মঙ্গোডিবি আইডি দিয়ে আপডেট করে দিচ্ছি যাতে আপডেট করতে সুবিধা হয়
-          navigate(`/admin/dashboard/edit-product/${matchedProduct._id}`, { replace: true });
         } else {
-          alert("Product not found with this SKU!");
+          alert("No product found with this SKU!");
         }
       }
     } catch (error) {
-      console.error("🚨 Error fetching product:", error);
+      console.error("Error fetching product:", error);
       alert("Error loading product. Please check the ID or SKU.");
     } finally {
       setLoading(false);
     }
   };
-
-
-
-  const handleDeleteProduct = async () => {
-    const confirmDelete = window.confirm("Are you sure delete product")
-
-    if(confirmDelete) {
-      try{
-        const response = await axios.delete(`http://localhost:5000/api/products/delete/${id}`);
-
-        if (response.data.success) {
-          alert("product delete successfully!");
-
-          navigate('/')
-        }
-      } catch(error) {
-        console.error("Delete Failed", error);
-        alert(error.response?.data?.message || "something went wrong while deleting the product. ")
-
-      }
-    }
-
-
-  }
-
 
   useEffect(() => {
     if (id) {
@@ -361,18 +92,66 @@ const EditProduct = () => {
     }
   };
 
+  // 🎯 ৪. সম্পূর্ণ ফিক্সড এবং সেফ Delete Function
+  const handleDeleteProduct = async () => {
+    if (!currentProductId) {
+      alert("No valid product loaded to delete!");
+      return;
+    }
+
+    const confirmDelete = window.confirm("Are you sure you want to permanently delete this product?");
+
+    if (confirmDelete) {
+      try {
+        setActionLoading(true);
+        const token = localStorage.getItem("token");
+
+        const response = await axios.delete(`${BASE_URL}/api/products/delete/${currentProductId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+          withCredentials: true
+        });
+
+        if (response.data.success || response.status === 200) {
+          alert("Product deleted successfully! 🗑️");
+           setCurrentProductId("");
+          setSearchId("");
+
+          navigate('/admin/dashboard/dashboard', { replace: true });
+        }
+      } catch (error) {
+        console.error("Delete Failed:", error);
+        if (error.response?.status === 401 || error.response?.status === 403) {
+          alert("Session expired or Unauthorized access! Please login again.");
+        } else {
+          alert(error.response?.data?.message || "Failed to delete product.");
+        }
+      } finally {
+        setActionLoading(false);
+      }
+    }
+  };
+
   const handleSizeChange = (size) => {
-    setSelectedSizes(prev => prev.includes(size) ? prev.filter(s => s !== size) : [...prev, size]);
+    setSelectedSizes((prev) => (prev.includes(size) ? prev.filter((s) => s !== size) : [...prev, size]));
   };
 
   const handleColorChange = (color) => {
-    setSelectedColors(prev => prev.includes(color) ? prev.filter(c => c !== color) : [...prev, color]);
+    setSelectedColors((prev) => (prev.includes(color) ? prev.filter((c) => c !== color) : [...prev, color]));
   };
 
-  // 🎯 প্রোডাক্ট এডিট/আপডেট সাবমিট ফাংশন
+  // 🎯 ৫. Update Submit Handler
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
+
+    if (!currentProductId) {
+      alert("Please load a valid product first before updating!");
+      return;
+    }
+
+    setActionLoading(true);
+    const token = localStorage.getItem("token");
 
     const formData = new FormData();
     formData.append("title", title);
@@ -386,133 +165,242 @@ const EditProduct = () => {
     if (mainImage) formData.append("mainImage", mainImage);
 
     try {
-      // 🚀 আপনার ব্যাকএন্ডের সঠিক পুট (PUT) রাউট স্ট্রাকচার অনুযায়ী URL সেট করা হলো:
-      const targetId = id; 
-      if (!targetId) {
-        alert("Please load a valid product first before updating!");
-        setLoading(false);
-        return;
-      }
-
-      const res = await axios.put(`http://localhost:5000/api/products/update/${targetId}`, formData, {
-        headers: { "Content-Type": "multipart/form-data" }
+      const res = await axios.put(`${BASE_URL}/api/products/update/${currentProductId}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`
+        },
+        withCredentials: true
       });
 
       if (res.data.success || res.status === 200) {
         alert("Product updated successfully! 🎉");
       }
     } catch (error) {
-      console.error("🚨 Update Error:", error);
-      alert("Something went wrong while updating.");
+      console.error("Update Error:", error);
+      alert(error.response?.data?.message || "Something went wrong while updating.");
     } finally {
-      setLoading(false);
+      setActionLoading(false);
     }
   };
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-12 font-sans text-neutral-900 mt-10">
+    <div className="max-w-4xl mx-auto px-4 py-10 font-sans text-gray-800">
       
-      {/* ১. সার্চ বার (আইডি অথবা SKU দুটোই কাজ করবে) */}
-      <div className="mb-10 border border-dashed border-gray-300 p-4 bg-gray-50 rounded">
-        <form onSubmit={handleSearchSubmit} className="flex gap-2">
-          <input 
-            type="text" 
-            placeholder="Paste Product ID or SKU here to edit..." 
+      {/* Search Header Bar */}
+      <div className="mb-8 border border-teal-800/20 p-5 bg-[#022525]/5 rounded-xl shadow-sm">
+        <form onSubmit={handleSearchSubmit} className="flex flex-col sm:flex-row gap-3">
+          <input
+            type="text"
+            placeholder="Paste Product ID or SKU here to edit..."
             value={searchId}
             onChange={(e) => setSearchId(e.target.value)}
-            className="flex-1 border border-gray-300 px-3 py-2 text-sm outline-none focus:border-black"
+            className="flex-1 border border-gray-300 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-teal-600 bg-white"
           />
-          <button type="submit" className="bg-black text-white px-5 py-2 text-sm uppercase tracking-wider">
+          <button 
+            type="submit" 
+            className="bg-[#022525] hover:bg-teal-900 text-white font-medium px-6 py-2.5 rounded-lg text-sm tracking-wide transition duration-200 shadow-md"
+          >
             Load Product
           </button>
         </form>
       </div>
 
-      <h1 className="text-2xl font-light tracking-widest uppercase text-center mb-10">Edit Product Panel</h1>
-      
+      <h1 className="text-2xl sm:text-3xl font-light tracking-wider uppercase text-center mb-8 text-[#022525]">
+        Edit Product Panel
+      </h1>
+
       {loading ? (
-        <div className="text-center py-10 text-gray-500">Processing...</div>
+        <div className="flex justify-center items-center py-20">
+          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#022525]"></div>
+        </div>
       ) : (
-        <form onSubmit={handleSubmit} className="space-y-6 border border-gray-100 p-8 bg-white shadow-sm">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <form onSubmit={handleSubmit} className="space-y-6 border border-gray-100 p-6 sm:p-8 bg-white rounded-2xl shadow-lg">
+          
+          {/* Title & SKU */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div>
-              <label className="block text-xs uppercase tracking-wider text-gray-500 mb-1">Product Title</label>
-              <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required className="w-full border border-gray-200 px-4 py-2.5 text-sm focus:border-black outline-none" />
+              <label className="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1">Product Title</label>
+              <input
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                required
+                className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-teal-500 outline-none transition"
+              />
             </div>
             <div>
-              <label className="block text-xs uppercase tracking-wider text-gray-500 mb-1">SKU</label>
-              <input type="text" value={sku} onChange={(e) => setSku(e.target.value)} required className="w-full border border-gray-200 px-4 py-2.5 text-sm focus:border-black outline-none" />
+              <label className="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1">SKU</label>
+              <input
+                type="text"
+                value={sku}
+                onChange={(e) => setSku(e.target.value)}
+                required
+                className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-teal-500 outline-none transition"
+              />
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {/* Price & Category */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div>
-              <label className="block text-xs uppercase tracking-wider text-gray-500 mb-1">Price</label>
-              <input type="number" value={price} onChange={(e) => setPrice(e.target.value)} required className="w-full border border-gray-200 px-4 py-2.5 text-sm focus:border-black outline-none" />
+              <label className="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1">Price ($)</label>
+              <input
+                type="number"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+                required
+                className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-teal-500 outline-none transition"
+              />
             </div>
             <div>
-              <label className="block text-xs uppercase tracking-wider text-gray-500 mb-1">Category</label>
-              <input type="text" value={category} onChange={(e) => setCategory(e.target.value)} required className="w-full border border-gray-200 px-4 py-2.5 text-sm focus:border-black outline-none" />
+              <label className="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1">Category</label>
+              <input
+                type="text"
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                required
+                className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-teal-500 outline-none transition"
+              />
             </div>
           </div>
 
+          {/* Fabric */}
           <div>
-            <label className="block text-xs uppercase tracking-wider text-gray-500 mb-2">Stock Availability</label>
-            <select value={inStock} onChange={(e) => setInStock(e.target.value === "true")} className="w-full border border-gray-200 px-4 py-2.5 text-sm bg-white focus:border-black outline-none">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1">Fabric Material</label>
+            <input
+              type="text"
+              value={fabric}
+              onChange={(e) => setFabric(e.target.value)}
+              placeholder="e.g. 100% Organic Cotton"
+              className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-teal-500 outline-none transition"
+            />
+          </div>
+
+          {/* In Stock Dropdown */}
+          <div>
+            <label className="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">Stock Availability</label>
+            <select
+              value={inStock}
+              onChange={(e) => setInStock(e.target.value === "true")}
+              className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm bg-white focus:ring-2 focus:ring-teal-500 outline-none transition cursor-pointer"
+            >
               <option value="true">🟢 In Stock (Available)</option>
               <option value="false">🔴 Out of Stock (Sold Out)</option>
             </select>
           </div>
 
+          {/* Sizes */}
           <div>
-            <label className="block text-xs uppercase tracking-wider text-gray-500 mb-2">Available Sizes</label>
+            <label className="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">Available Sizes</label>
             <div className="flex flex-wrap gap-4">
-              {availableSizes.map(size => (
-                <label key={size} className="flex items-center gap-2 text-sm cursor-pointer">
-                  <input type="checkbox" checked={selectedSizes.includes(size)} onChange={() => handleSizeChange(size)} className="accent-black" />
+              {availableSizes.map((size) => (
+                <label key={size} className="flex items-center gap-2 text-sm cursor-pointer select-none">
+                  <input
+                    type="checkbox"
+                    checked={selectedSizes.includes(size)}
+                    onChange={() => handleSizeChange(size)}
+                    className="accent-teal-700 w-4 h-4 rounded"
+                  />
                   {size}
                 </label>
               ))}
             </div>
           </div>
 
+          {/* Colors */}
           <div>
-            <label className="block text-xs uppercase tracking-wider text-gray-500 mb-2">Available Colors</label>
+            <label className="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">Available Colors</label>
             <div className="flex flex-wrap gap-4">
-              {availableColors.map(color => (
-                <label key={color} className="flex items-center gap-2 text-sm cursor-pointer">
-                  <input type="checkbox" checked={selectedColors.includes(color)} onChange={() => handleColorChange(color)} className="accent-black" />
+              {availableColors.map((color) => (
+                <label key={color} className="flex items-center gap-2 text-sm cursor-pointer select-none">
+                  <input
+                    type="checkbox"
+                    checked={selectedColors.includes(color)}
+                    onChange={() => handleColorChange(color)}
+                    className="accent-teal-700 w-4 h-4 rounded"
+                  />
                   {color}
                 </label>
               ))}
             </div>
           </div>
 
-          <div>
-            <label className="block text-xs uppercase tracking-wider text-gray-500 mb-1">Product Main Image</label>
-            {existingImage && <p className="text-xs text-gray-400 mb-2">Current: {existingImage}</p>}
-            <input type="file" onChange={(e) => setMainImage(e.target.files[0])} className="text-sm" />
+          {/* Main Image */}
+          <div className="pt-2 border-t border-gray-100">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1">Product Main Image</label>
+            {existingImage && (
+              <p className="text-xs text-teal-700 font-medium mb-2 truncate">
+                Current Image URL: <span className="underline">{existingImage}</span>
+              </p>
+            )}
+            <input 
+              type="file" 
+              onChange={(e) => setMainImage(e.target.files[0])} 
+              className="text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-teal-800 hover:file:bg-teal-100 cursor-pointer" 
+            />
           </div>
 
-          <div className="flex gap-4 mt-8">
-            <div className="pt-4">
-            <button type="submit" className="w-full bg-neutral-950 text-white text-xs tracking-[0.2em] uppercase py-4 font-medium hover:bg-black transition-colors">
-              Update Product
+          {/* 🎯 🌟 6. Modernized Update & Delete Action Buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 pt-6 border-t border-gray-100">
+            
+            {/* Update Button */}
+            <button
+              type="submit"
+              disabled={actionLoading}
+              className="flex-1 group relative inline-flex items-center justify-center overflow-hidden rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-700 p-0.5 font-medium text-white shadow-lg transition duration-300 hover:shadow-emerald-500/30 active:scale-[0.98] disabled:opacity-60"
+            >
+              <span className="relative flex w-full items-center justify-center rounded-[10px] bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-700 px-6 py-3.5 text-xs font-bold uppercase tracking-widest transition duration-300 group-hover:bg-opacity-0">
+                {actionLoading ? (
+                  <span className="flex items-center gap-2">
+                    <svg className="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                    </svg>
+                    Updating...
+                  </span>
+                ) : (
+                  <span className="flex items-center gap-2">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                    </svg>
+                    Update Product
+                  </span>
+                )}
+              </span>
             </button>
 
-            <button type="button" onClick={handleDeleteProduct}
-             className="px-6 bg-red-600 text-white text-xs uppercase tracking-wider py-3 font-semibold hover:bg-red-700 transition-colors">
-              Delete Product
+            {/* Delete Button */}
+            <button
+              type="button"
+              onClick={handleDeleteProduct}
+              disabled={actionLoading}
+              className="flex-1 group relative inline-flex items-center justify-center overflow-hidden rounded-xl bg-gradient-to-r from-red-500 via-rose-600 to-red-700 p-0.5 font-medium text-white shadow-lg transition duration-300 hover:shadow-rose-500/30 active:scale-[0.98] disabled:opacity-60"
+            >
+              <span className="relative flex w-full items-center justify-center rounded-[10px] bg-gradient-to-r from-red-600 via-rose-600 to-red-700 px-6 py-3.5 text-xs font-bold uppercase tracking-widest transition duration-300 group-hover:bg-opacity-0">
+                {actionLoading ? (
+                  <span className="flex items-center gap-2">
+                    <svg className="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                    </svg>
+                    Deleting...
+                  </span>
+                ) : (
+                  <span className="flex items-center gap-2">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                    </svg>
+                    Delete Product
+                  </span>
+                )}
+              </span>
             </button>
+
           </div>
-          </div>
+
         </form>
       )}
-
-
-
-
-
     </div>
   );
 };

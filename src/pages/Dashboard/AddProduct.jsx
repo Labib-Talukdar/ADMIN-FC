@@ -260,7 +260,7 @@ galleryFiles.forEach((file) => {
         <div>
           <label className="block text-xs font-bold uppercase tracking-wider text-gray-600 mb-2">Available Sizes</label>
           <div className="flex flex-wrap gap-2">
-            {["XS", "S", "M", "L", "XL", "Unstitched"].map((size) => (
+            {["XS / 34", "S / 36", "M / 38", "L / 40", "XL / 42", "XXL / 44"].map((size) => (
               <button
                 type="button"
                 key={size}
