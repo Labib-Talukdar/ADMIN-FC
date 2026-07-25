@@ -488,10 +488,15 @@ const AddProduct = () => {
       // রিসেট ফর্ম (Optional)
       // setProduct({ ... initial states ... });
 
-    } catch (error) {
-      console.error("Upload failed:", error);
-      const errorMsg = error.response?.data?.message || "Product Upload Failed! Check Server Console.";
-      alert(errorMsg);
+    }  catch (error) {
+  console.error("Upload failed details:", error);
+  // ব্যাকএন্ড থেকে আসা আসল এরর মেসেজ অ্যালার্টে দেখানো
+  const errorMsg = error.response?.data?.message 
+    || error.response?.data?.error 
+    || error.message 
+    || "Product Upload Failed!";
+  alert(`Error: ${errorMsg}`);
+
     } finally {
       setLoading(false);
     }
