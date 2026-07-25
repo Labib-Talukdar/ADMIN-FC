@@ -7,7 +7,7 @@ const EditProduct = () => {
   const navigate = useNavigate();
 
   // BASE URL Config
-  const BASE_URL = import.meta.env.VITE_API_URL || "https://fc-server-side.onrender.com";
+  const BASE_URL = import.meta.env.VITE_API_URL || "https://fc-server-side-1.onrender.com";
 
   // Search & Loading States
   const [searchId, setSearchId] = useState(id || "");

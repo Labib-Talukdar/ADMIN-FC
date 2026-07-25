@@ -14,7 +14,7 @@ const Login = () => {
 
   const onSubmit = async (data) => {
     try {
-      const BASE_URL = import.meta.env.VITE_API_URL || "https://fc-server-side.onrender.com";
+      const BASE_URL = import.meta.env.VITE_API_URL || "https://fc-server-side-1.onrender.com";
       console.log(BASE_URL);
 
       const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/admin-login`, data, {

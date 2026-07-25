@@ -477,7 +477,7 @@ const AddProduct = () => {
 
     try {
       // ✅ VITE_API_URL চেক ও Axios call
-      const apiUrl = import.meta.env.VITE_API_URL || "https://fc-server-side.onrender.com";
+      const apiUrl = import.meta.env.VITE_API_URL || "https://fc-server-side-1.onrender.com";
       
       const response = await axios.post(`${apiUrl}/api/products/add`, formData, {
         withCredentials: true, // Cookies/Session-এর জন্য
