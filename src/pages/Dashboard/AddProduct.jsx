@@ -94,7 +94,7 @@ galleryFiles.forEach((file) => {
 
   // Axios or Fetch sent request
   try{
-    const response = await axios.post("http://localhost:5000/api/products/add", formData, {
+    const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/products/add`, formData, {
         headers: {"Content-Type": "multipart/form-data"},
         withCredentials: true 
     });
