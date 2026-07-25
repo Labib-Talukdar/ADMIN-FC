@@ -1,8 +1,14 @@
-//  import React, { useState } from "react";
-//  import axios from "axios";
+ 
+
+
+// import React, { useState } from "react";
+// import axios from "axios";
 
 // const AddProduct = () => {
-//   // আপনার রিকোয়ারমেন্ট অনুযায়ী নতুন স্টেট স্ট্রাকচার
+//   // লোডিং স্টেট
+//   const [loading, setLoading] = useState(false);
+
+//   // স্টেট স্ট্রাকচার
 //   const [product, setProduct] = useState({
 //     title: "",
 //     sku: "",
@@ -13,12 +19,12 @@
 //     dupattaDetails: "",
 //     trouserDetails: "",
 //     sizes: [],
-//     colors: [], // ফ্রন্টএন্ড ফিল্টারিংয়ের জন্য কালার লিস্ট
+//     colors: [],
 //     inStock: true,
 //     mainImage: null,
-//     mainImages:null, // ১টি মেইন ইমেজ (ইউজার চয়েস করার জন্য)
+//     mainImageFile: null,
 //     galleryImages: [null, null, null],
-//     galleryImagesFiles: [null,null,null] // নিচে দেখানোর জন্য ফিক্সড ৩টি সাব-ইমেজ
+//     galleryImagesFiles: [null, null, null],
 //   });
 
 //   // টেক্সট ইনপুট হ্যান্ডলার
@@ -27,7 +33,7 @@
 //     setProduct({ ...product, [name]: value });
 //   };
 
-//   // সাইজ সিলেক্টর (রেড থিম)
+//   // সাইজ সিলেক্টর
 //   const handleSizeChange = (size) => {
 //     const updatedSizes = product.sizes.includes(size)
 //       ? product.sizes.filter((s) => s !== size)
@@ -35,7 +41,7 @@
 //     setProduct({ ...product, sizes: updatedSizes });
 //   };
 
-//   // কালার সিলেক্টর ফিল্টার (মাল্টিপল কালার সিলেক্ট করার জন্য)
+//   // কালার সিলেক্টর ফিল্টার
 //   const handleColorChange = (colorName) => {
 //     const updatedColors = product.colors.includes(colorName)
 //       ? product.colors.filter((c) => c !== colorName)
@@ -43,15 +49,19 @@
 //     setProduct({ ...product, colors: updatedColors });
 //   };
 
-//   // ১. মেইন ইমেজ আপলোড হ্যান্ডলার (সিঙ্গেল ইমেজ)
+//   // ১. মেইন ইমেজ আপলোড হ্যান্ডলার
 //   const handleMainImageChange = (e) => {
 //     const file = e.target.files[0];
 //     if (file) {
-//       setProduct({ ...product, mainImage: URL.createObjectURL(file),mainImageFile:file });
+//       setProduct({
+//         ...product,
+//         mainImage: URL.createObjectURL(file),
+//         mainImageFile: file,
+//       });
 //     }
 //   };
 
-//   // ২. ৩টি সাব-গ্যালারি ইমেজ আপলোড হ্যান্ডলার (ইন্ডেক্স অনুযায়ী)
+//   // ২. ৩টি সাব-গ্যালারি ইমেজ আপলোড হ্যান্ডলার
 //   const handleGalleryImageChange = (e, index) => {
 //     const file = e.target.files[0];
 //     if (file) {
@@ -59,60 +69,70 @@
 //       updatedGallery[index] = URL.createObjectURL(file);
 //       const updatedFiles = [...(product.galleryImagesFiles || [])];
 //       updatedFiles[index] = file;
-//       setProduct({ ...product, galleryImages: updatedGallery, galleryImagesFiles: updatedFiles });
+//       setProduct({
+//         ...product,
+//         galleryImages: updatedGallery,
+//         galleryImagesFiles: updatedFiles,
+//       });
 //     }
 //   };
 
+//   // ফর্ম সাবমিট হ্যান্ডলার
 //   const handleSubmit = async (e) => {
 //     e.preventDefault();
+//     setLoading(true);
 
 //     const formData = new FormData();
 
-//   formData.append("title", product.title);
-//   formData.append("sku", product.sku);
-//   formData.append("price", product.price);
-//   formData.append("category", product.category);
-//   formData.append("fabric", product.fabric);
-//   formData.append("shirtDetails", product.shirtDetails);
-//   formData.append("dupattaDetails", product.dupattaDetails);
-//   formData.append("trouserDetails", product.trouserDetails);
-//   formData.append("inStock", product.inStock);
+//     formData.append("title", product.title);
+//     formData.append("sku", product.sku);
+//     formData.append("price", product.price);
+//     formData.append("category", product.category);
+//     formData.append("fabric", product.fabric);
+//     formData.append("shirtDetails", product.shirtDetails);
+//     formData.append("dupattaDetails", product.dupattaDetails);
+//     formData.append("trouserDetails", product.trouserDetails);
+//     formData.append("inStock", product.inStock);
 
-//   formData.append("sizes", JSON.stringify(product.sizes));
-//   formData.append("colors", JSON.stringify(product.colors));
+//     formData.append("sizes", JSON.stringify(product.sizes));
+//     formData.append("colors", JSON.stringify(product.colors));
 
+//     if (product.mainImageFile) {
+//       formData.append("mainImage", product.mainImageFile);
+//     }
 
-  
-//  if (product.mainImageFile) {
-//   formData.append("mainImage", product.mainImageFile);
-// }
+//     const galleryFiles = product.galleryImagesFiles || [];
+//     galleryFiles.forEach((file) => {
+//       if (file) formData.append("galleryImages", file);
+//     });
 
-// const galleryFiles = product.galleryImagesFiles || [];
-// galleryFiles.forEach((file) => {
-//   if (file) formData.append("galleryImages", file);
-// });
+//     try {
+//       // ✅ VITE_API_URL চেক ও Axios call
+//       const apiUrl = import.meta.env.VITE_API_URL || "https://fc-server-side-1.onrender.com";
+      
+//       const response = await axios.post(`${apiUrl}/api/products/add`, formData, {
+//         withCredentials: true, // Cookies/Session-এর জন্য
+//       });
 
-//   // Axios or Fetch sent request
-//   try{
-//  const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/products/add`, formData, {
-//     headers: {"Content-Type": "multipart/form-data"},
-//     withCredentials: true 
-// });
-//     alert(response.data.message);
-//   } catch(error) {
-//     console.log("Upload failed", error)
+//       alert(response.data.message || "Product added successfully!");
+      
+//       // রিসেট ফর্ম (Optional)
+//       // setProduct({ ... initial states ... });
+
+//     }  catch (error) {
+//   console.error("Upload failed details:", error);
+//   // ব্যাকএন্ড থেকে আসা আসল এরর মেসেজ অ্যালার্টে দেখানো
+//   const errorMsg = error.response?.data?.message 
+//     || error.response?.data?.error 
+//     || error.message 
+//     || "Product Upload Failed!";
+//   alert(`Error: ${errorMsg}`);
+
+//     } finally {
+//       setLoading(false);
+//     }
 //   };
 
-    
-
-//     // console.log("Red Brand Style Product Data:", product);
-//     // alert("প্রোডাক্ট ডেটা রেড ব্র্যান্ড থিমে কনসোলে পাঠানো হয়েছে!");
-//   };
-
-
-
-
-//   // পাকিস্তানি ড্রেসের জন্য পপুলার কিছু ফিল্টার কালার লিস্ট
 //   const availableColors = [
 //     { name: "Red", class: "bg-red-600" },
 //     { name: "Maroon", class: "bg-amber-950" },
@@ -121,21 +141,17 @@
 //     { name: "Emerald Green", class: "bg-emerald-800" },
 //     { name: "Navy Blue", class: "bg-blue-900" },
 //     { name: "Pink", class: "bg-pink-400" },
-//     { name: "Mustard", class: "bg-yellow-600" }
+//     { name: "Mustard", class: "bg-yellow-600" },
 //   ];
 
 //   return (
 //     <div className="max-w-4xl mx-auto bg-white p-6 sm:p-8 rounded-2xl border border-gray-200 shadow-sm font-sans">
-      
-//       {/* হেডার টাইটেল */}
 //       <div className="border-b border-gray-100 pb-4 mb-6">
 //         <h2 className="text-xl font-bold text-gray-900 uppercase tracking-wide">Add New Luxury Premium Dress</h2>
 //         <p className="text-xs text-gray-500 mt-1">FC ব্র্যান্ডের রেড কালার থিমে নতুন পাকিস্তানি কালেকশন যুক্ত করুন</p>
 //       </div>
 
 //       <form onSubmit={handleSubmit} className="space-y-6">
-        
-//         {/* ১. ড্রেসের নাম ও SKU কোড */}
 //         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 //           <div className="md:col-span-2">
 //             <label className="block text-xs font-bold uppercase tracking-wider text-gray-600 mb-2">Product Title</label>
@@ -163,7 +179,6 @@
 //           </div>
 //         </div>
 
-//         {/* ২. প্রাইস ও ক্যাটাগরি */}
 //         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 //           <div>
 //             <label className="block text-xs font-bold uppercase tracking-wider text-gray-600 mb-2">Price (BDT)</label>
@@ -199,7 +214,7 @@
 //           </div>
 //         </div>
 
-//         {/* ৩. কালার সেকশন (ফ্রন্টএন্ড ফিল্টারের জন্য কাস্টম চয়েস) */}
+//         {/* Filter Colors */}
 //         <div className="p-4 bg-gray-50 rounded-xl border border-gray-100">
 //           <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-3">
 //             Product Filter Color
@@ -226,7 +241,7 @@
 //           </div>
 //         </div>
 
-//         {/* ৪. ড্রেস স্পেসিফিকেশন ও ডেসক্রিপশন */}
+//         {/* Specifications */}
 //         <div className="bg-gray-50 p-4 rounded-xl border border-gray-100 space-y-4">
 //           <h3 className="text-xs font-bold text-gray-800 uppercase tracking-wider">Dress Specification</h3>
 //           <div>
@@ -256,7 +271,7 @@
 //           </div>
 //         </div>
 
-//         {/* ৫. সাইজ সিলেকশন (রেড ব্র্যান্ড থিম) */}
+//         {/* Sizes */}
 //         <div>
 //           <label className="block text-xs font-bold uppercase tracking-wider text-gray-600 mb-2">Available Sizes</label>
 //           <div className="flex flex-wrap gap-2">
@@ -277,13 +292,11 @@
 //           </div>
 //         </div>
 
-//         {/* ----------------- ৬. ইমেজের কাস্টম গ্যালারি আর্কিটেকচার ----------------- */}
+//         {/* Image Section */}
 //         <div className="space-y-6">
-          
-//           {/* ক) মেইন ইমেজ আপলোড (ইউজার যেটা দেখে চয়েস করবে - ১টি ছবি) */}
 //           <div>
 //             <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-2">
-//               Main Cover Image (ইউজার চয়েসের জন্য মূল ছবি)
+//               Main Cover Image (ইউজার চয়েসের জন্য মূল ছবি)
 //             </label>
 //             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
 //               <div className="border-2 border-dashed border-gray-200 rounded-xl p-4 text-center cursor-pointer bg-gray-50 hover:border-red-500 relative h-32 flex flex-col justify-center items-center">
@@ -299,7 +312,6 @@
 //             </div>
 //           </div>
 
-//           {/* খ) সাব-গ্যালারি ইমেজ (মেইন ছবিতে ক্লিক করলে নিচে যে ৩টি ছবি শো করবে) */}
 //           <div>
 //             <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-2">
 //               Sub-Gallery Images (মেইন ইমেজের আন্ডারে ৩টি স্লাইডার ছবি)
@@ -325,24 +337,35 @@
 //               ))}
 //             </div>
 //           </div>
-
 //         </div>
-//         {/* ------------------------------------------------------------------ */}
 
-//         {/* পাবলিশ বাটন */}
+//         {/* Submit Button */}
 //         <button 
 //           type="submit" 
-//           className="w-full bg-gray-900 hover:bg-red-600 text-white font-bold text-xs py-4 px-4 rounded-xl transition-all duration-300 tracking-widest uppercase shadow-sm"
+//           disabled={loading}
+//           className={`w-full text-white font-bold text-xs py-4 px-4 rounded-xl transition-all duration-300 tracking-widest uppercase shadow-sm ${
+//             loading ? "bg-gray-400 cursor-not-allowed" : "bg-gray-900 hover:bg-red-600"
+//           }`}
 //         >
-//           Publish Product (FC Red Style)
+//           {loading ? "Uploading Product..." : "Publish Product (FC Red Style)"}
 //         </button>
-
 //       </form>
 //     </div>
 //   );
 // };
 
 // export default AddProduct;
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -377,12 +400,13 @@ const AddProduct = () => {
   // লোডিং স্টেট
   const [loading, setLoading] = useState(false);
 
-  // স্টেট স্ট্রাকচার
+  // স্টেট স্ট্রাকচার (subCategory যোগ করা হয়েছে)
   const [product, setProduct] = useState({
     title: "",
     sku: "",
     price: "",
     category: "",
+    subCategory: "", // 👈 নতুন সাব-ক্যাটাগরি ফিল্ড
     fabric: "",
     shirtDetails: "",
     dupattaDetails: "",
@@ -399,7 +423,12 @@ const AddProduct = () => {
   // টেক্সট ইনপুট হ্যান্ডলার
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setProduct({ ...product, [name]: value });
+    // ক্যাটাগরি চেঞ্জ করলে সাব-ক্যাটাগরি রিসেট হবে
+    if (name === "category" && value !== "Accessories") {
+      setProduct({ ...product, [name]: value, subCategory: "" });
+    } else {
+      setProduct({ ...product, [name]: value });
+    }
   };
 
   // সাইজ সিলেক্টর
@@ -457,6 +486,7 @@ const AddProduct = () => {
     formData.append("sku", product.sku);
     formData.append("price", product.price);
     formData.append("category", product.category);
+    formData.append("subCategory", product.subCategory); // 👈 ব্যাকএন্ডে সাব-ক্যাটাগরি পাঠানো হচ্ছে
     formData.append("fabric", product.fabric);
     formData.append("shirtDetails", product.shirtDetails);
     formData.append("dupattaDetails", product.dupattaDetails);
@@ -476,26 +506,21 @@ const AddProduct = () => {
     });
 
     try {
-      // ✅ VITE_API_URL চেক ও Axios call
       const apiUrl = import.meta.env.VITE_API_URL || "https://fc-server-side-1.onrender.com";
       
       const response = await axios.post(`${apiUrl}/api/products/add`, formData, {
-        withCredentials: true, // Cookies/Session-এর জন্য
+        withCredentials: true,
       });
 
       alert(response.data.message || "Product added successfully!");
       
-      // রিসেট ফর্ম (Optional)
-      // setProduct({ ... initial states ... });
-
-    }  catch (error) {
-  console.error("Upload failed details:", error);
-  // ব্যাকএন্ড থেকে আসা আসল এরর মেসেজ অ্যালার্টে দেখানো
-  const errorMsg = error.response?.data?.message 
-    || error.response?.data?.error 
-    || error.message 
-    || "Product Upload Failed!";
-  alert(`Error: ${errorMsg}`);
+    } catch (error) {
+      console.error("Upload failed details:", error);
+      const errorMsg = error.response?.data?.message 
+        || error.response?.data?.error 
+        || error.message 
+        || "Product Upload Failed!";
+      alert(`Error: ${errorMsg}`);
 
     } finally {
       setLoading(false);
@@ -579,9 +604,33 @@ const AddProduct = () => {
               <option value="Semi Bridal Boutique">Semi Bridal Boutique</option>
               <option value="Cotton Collections">Cotton Collections</option>
               <option value="Kids Collections">Kids Collections</option>
+              <option value="Accessories">Accessories</option> {/* 👈 যুক্ত করা হয়েছে */}
             </select>
           </div>
         </div>
+
+        {/* 🌟 ডায়নামিক Accessories Sub-Category Dropdown */}
+        {product.category === "Accessories" && (
+          <div className="p-4 bg-red-50/40 border border-red-100 rounded-xl transition-all duration-300">
+            <label className="block text-xs font-bold uppercase tracking-wider text-red-600 mb-2">
+              Select Accessories Type / Collection
+            </label>
+            <select
+              name="subCategory"
+              value={product.subCategory}
+              onChange={handleChange}
+              className="w-full px-4 py-3 border border-red-200 rounded-xl focus:ring-1 focus:ring-red-600 outline-none bg-white text-sm text-gray-700 font-medium"
+              required
+            >
+              <option value="">Choose Sub-Category</option>
+              <option value="Shoes">Shoes</option>
+              <option value="Singles">Singles</option>
+              <option value="Jewelry">Jewelry</option>
+              <option value="Bags">Bags</option>
+              <option value="Others">Others</option>
+            </select>
+          </div>
+        )}
 
         {/* Filter Colors */}
         <div className="p-4 bg-gray-50 rounded-xl border border-gray-100">
