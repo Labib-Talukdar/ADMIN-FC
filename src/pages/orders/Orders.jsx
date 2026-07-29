@@ -406,7 +406,7 @@ const handleDeleteOrder = async (orderId) => {
   if (!isConfirmed) return;
 
   try {
-    console.log("Deleting Order ID:", orderId);
+    // console.log("Deleting Order ID:", orderId);
     
     // API Call
     await API.delete(`/api/orders/${orderId}`);
