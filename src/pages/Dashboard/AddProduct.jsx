@@ -1,5 +1,6 @@
  
 
+
 // import React, { useState } from "react";
 // import axios from "axios";
 
@@ -7,17 +8,16 @@
 //   // লোডিং স্টেট
 //   const [loading, setLoading] = useState(false);
 
-//   // স্টেট স্ট্রাকচার (subCategory যোগ করা হয়েছে)
+//   // স্টেট স্ট্রাকচার (আগের সব ব্যাকএন্ড ফিল্ড ঠিক রাখা হয়েছে)
 //   const [product, setProduct] = useState({
 //     title: "",
 //     sku: "",
 //     price: "",
 //     category: "",
-//     subCategory: "", // 👈 নতুন সাব-ক্যাটাগরি ফিল্ড
+//     subCategory: "",
 //     fabric: "",
-//     shirtDetails: "",
-//     dupattaDetails: "",
-//     trouserDetails: "",
+//     description: "", // 👈 ১. বড় বিবরণ বক্স
+//     disclaimer: "Product color may slightly vary due to photographic lighting sources or your monitor settings.", // 👈 ২. বড় ডিসক্লেইমার বক্স
 //     sizes: [],
 //     colors: [],
 //     inStock: true,
@@ -30,7 +30,6 @@
 //   // টেক্সট ইনপুট হ্যান্ডলার
 //   const handleChange = (e) => {
 //     const { name, value } = e.target;
-//     // ক্যাটাগরি চেঞ্জ করলে সাব-ক্যাটাগরি রিসেট হবে
 //     if (name === "category" && value !== "Accessories") {
 //       setProduct({ ...product, [name]: value, subCategory: "" });
 //     } else {
@@ -38,7 +37,7 @@
 //     }
 //   };
 
-//   // সাইজ সিলেক্টর
+//   // সাইজ সিলেক্টর (আগের মতো ইন্ডিভিজুয়াল সাইজ অপশন)
 //   const handleSizeChange = (size) => {
 //     const updatedSizes = product.sizes.includes(size)
 //       ? product.sizes.filter((s) => s !== size)
@@ -93,11 +92,10 @@
 //     formData.append("sku", product.sku);
 //     formData.append("price", product.price);
 //     formData.append("category", product.category);
-//     formData.append("subCategory", product.subCategory); // 👈 ব্যাকএন্ডে সাব-ক্যাটাগরি পাঠানো হচ্ছে
+//     formData.append("subCategory", product.subCategory);
 //     formData.append("fabric", product.fabric);
-//     formData.append("shirtDetails", product.shirtDetails);
-//     formData.append("dupattaDetails", product.dupattaDetails);
-//     formData.append("trouserDetails", product.trouserDetails);
+//     formData.append("description", product.description);
+//     formData.append("disclaimer", product.disclaimer);
 //     formData.append("inStock", product.inStock);
 
 //     formData.append("sizes", JSON.stringify(product.sizes));
@@ -145,36 +143,39 @@
 //     { name: "Mustard", class: "bg-yellow-600" },
 //   ];
 
+//   // প্রফেশনাল ও অরিজিনাল সাইজ লিস্ট
+//   const availableSizes = ["S 36-38", "M 40-42", "L 44-46", "XL 46-48"];
+
 //   return (
 //     <div className="max-w-4xl mx-auto bg-white p-6 sm:p-8 rounded-2xl border border-gray-200 shadow-sm font-sans">
 //       <div className="border-b border-gray-100 pb-4 mb-6">
-//         <h2 className="text-xl font-bold text-gray-900 uppercase tracking-wide">Add New Luxury Premium Dress</h2>
-//         <p className="text-xs text-gray-500 mt-1">FC ব্র্যান্ডের রেড কালার থিমে নতুন পাকিস্তানি কালেকশন যুক্ত করুন</p>
+//         <h2 className="text-2xl font-bold text-gray-900 uppercase tracking-wide">Add New Luxury Premium Dress</h2>
+//         <p className="text-sm text-gray-500 mt-1">FC ব্র্যান্ডের রেড কালার থিমে নতুন পাকিস্তানি কালেকশন যুক্ত করুন</p>
 //       </div>
 
 //       <form onSubmit={handleSubmit} className="space-y-6">
 //         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 //           <div className="md:col-span-2">
-//             <label className="block text-xs font-bold uppercase tracking-wider text-gray-600 mb-2">Product Title</label>
+//             <label className="block text-sm font-bold uppercase tracking-wider text-gray-700 mb-2">Product Title</label>
 //             <input 
 //               type="text" 
 //               name="title"
 //               value={product.title}
 //               onChange={handleChange}
 //               placeholder="e.g., 3 Piece Pure Embroidered Silk Suit" 
-//               className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-1 focus:ring-red-600 focus:border-red-600 outline-none transition text-sm text-gray-700 bg-gray-50/30"
+//               className="w-full px-4 py-3.5 border border-gray-200 rounded-xl focus:ring-1 focus:ring-red-600 focus:border-red-600 outline-none transition text-base text-gray-800 bg-gray-50/30"
 //               required
 //             />
 //           </div>
 //           <div>
-//             <label className="block text-xs font-bold uppercase tracking-wider text-gray-600 mb-2">Product SKU / Code</label>
+//             <label className="block text-sm font-bold uppercase tracking-wider text-gray-700 mb-2">Product SKU / Code</label>
 //             <input 
 //               type="text" 
 //               name="sku"
 //               value={product.sku}
 //               onChange={handleChange}
 //               placeholder="e.g., S114744" 
-//               className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-1 focus:ring-red-600 focus:border-red-600 outline-none transition text-sm text-gray-700 bg-gray-50/30"
+//               className="w-full px-4 py-3.5 border border-gray-200 rounded-xl focus:ring-1 focus:ring-red-600 focus:border-red-600 outline-none transition text-base text-gray-800 bg-gray-50/30"
 //               required
 //             />
 //           </div>
@@ -182,24 +183,24 @@
 
 //         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 //           <div>
-//             <label className="block text-xs font-bold uppercase tracking-wider text-gray-600 mb-2">Price (BDT)</label>
+//             <label className="block text-sm font-bold uppercase tracking-wider text-gray-700 mb-2">Price (BDT)</label>
 //             <input 
 //               type="number" 
 //               name="price"
 //               value={product.price}
 //               onChange={handleChange}
 //               placeholder="e.g., 8500" 
-//               className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-1 focus:ring-red-600 focus:border-red-600 outline-none transition text-sm text-gray-700 bg-gray-50/30"
+//               className="w-full px-4 py-3.5 border border-gray-200 rounded-xl focus:ring-1 focus:ring-red-600 focus:border-red-600 outline-none transition text-base text-gray-800 bg-gray-50/30"
 //               required
 //             />
 //           </div>
 //           <div>
-//             <label className="block text-xs font-bold uppercase tracking-wider text-gray-600 mb-2">Category</label>
+//             <label className="block text-sm font-bold uppercase tracking-wider text-gray-700 mb-2">Category</label>
 //             <select 
 //               name="category"
 //               value={product.category}
 //               onChange={handleChange}
-//               className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-1 focus:ring-red-600 focus:border-red-600 outline-none bg-white transition text-sm text-gray-700"
+//               className="w-full px-4 py-3.5 border border-gray-200 rounded-xl focus:ring-1 focus:ring-red-600 focus:border-red-600 outline-none bg-white transition text-base text-gray-800"
 //               required
 //             >
 //               <option value="">Choose Category</option>
@@ -212,22 +213,22 @@
 //               <option value="Cotton Collections">Cotton Collections</option>
 //               <option value="Boutique Collections">Boutique Collections</option>
 //               <option value="Kids Collections">Kids Collections</option>
-//               <option value="Accessories">Accessories</option> {/* 👈 যুক্ত করা হয়েছে */}
+//               <option value="Accessories">Accessories</option>
 //             </select>
 //           </div>
 //         </div>
 
-//         {/* 🌟 ডায়নামিক Accessories Sub-Category Dropdown */}
+//         {/* Dynamic Accessories Sub-Category */}
 //         {product.category === "Accessories" && (
 //           <div className="p-4 bg-red-50/40 border border-red-100 rounded-xl transition-all duration-300">
-//             <label className="block text-xs font-bold uppercase tracking-wider text-red-600 mb-2">
+//             <label className="block text-sm font-bold uppercase tracking-wider text-red-600 mb-2">
 //               Select Accessories Type / Collection
 //             </label>
 //             <select
 //               name="subCategory"
 //               value={product.subCategory}
 //               onChange={handleChange}
-//               className="w-full px-4 py-3 border border-red-200 rounded-xl focus:ring-1 focus:ring-red-600 outline-none bg-white text-sm text-gray-700 font-medium"
+//               className="w-full px-4 py-3.5 border border-red-200 rounded-xl focus:ring-1 focus:ring-red-600 outline-none bg-white text-base text-gray-800 font-medium"
 //               required
 //             >
 //               <option value="">Choose Sub-Category</option>
@@ -239,8 +240,8 @@
 //         )}
 
 //         {/* Filter Colors */}
-//         <div className="p-4 bg-gray-50 rounded-xl border border-gray-100">
-//           <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-3">
+//         <div className="p-5 bg-gray-50 rounded-xl border border-gray-100">
+//           <label className="block text-sm font-bold uppercase tracking-wider text-gray-800 mb-3">
 //             Product Filter Color
 //           </label>
 //           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -251,13 +252,13 @@
 //                   type="button"
 //                   key={color.name}
 //                   onClick={() => handleColorChange(color.name)}
-//                   className={`flex items-center gap-2 p-2 rounded-lg border text-xs font-medium transition-all ${
+//                   className={`flex items-center gap-2.5 p-3 rounded-lg border text-sm font-medium transition-all ${
 //                     isSelected 
 //                       ? "border-red-600 bg-red-50 text-red-700 font-bold" 
-//                       : "border-gray-200 bg-white text-gray-600 hover:border-red-200"
+//                       : "border-gray-200 bg-white text-gray-700 hover:border-red-200"
 //                   }`}
 //                 >
-//                   <span className={`w-3 h-3 rounded-full ${color.class}`} />
+//                   <span className={`w-4 h-4 rounded-full ${color.class}`} />
 //                   <span>{color.name}</span>
 //                 </button>
 //               );
@@ -265,49 +266,66 @@
 //           </div>
 //         </div>
 
-//         {/* Specifications */}
-//         <div className="bg-gray-50 p-4 rounded-xl border border-gray-100 space-y-4">
-//           <h3 className="text-xs font-bold text-gray-800 uppercase tracking-wider">Dress Specification</h3>
+//         {/* 🌟 2 Large Text Boxes for Description & Disclaimer (Text Size Increased) */}
+//         <div className="bg-gray-50 p-6 rounded-xl border border-gray-100 space-y-6">
+//           <h3 className="text-sm font-bold text-gray-800 uppercase tracking-wider">Dress Specification & Details</h3>
+          
 //           <div>
-//             <label className="block text-[11px] font-semibold text-gray-500 mb-1">Fabric Details</label>
+//             <label className="block text-sm font-semibold text-gray-700 mb-2">Fabric Details</label>
 //             <input 
 //               type="text" 
 //               name="fabric"
 //               value={product.fabric}
 //               onChange={handleChange}
 //               placeholder="e.g., Pure Silk shirt with Organza Dupatta"
-//               className="w-full px-3 py-2 border border-gray-200 rounded-lg text-xs bg-white focus:outline-none focus:border-red-600"
+//               className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm bg-white focus:outline-none focus:border-red-600 text-gray-800"
 //             />
 //           </div>
-//           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+//           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+//             {/* Box 1: Description */}
 //             <div>
-//               <label className="block text-[11px] font-semibold text-gray-500 mb-1">Shirt Details</label>
-//               <textarea name="shirtDetails" value={product.shirtDetails} onChange={handleChange} className="w-full h-20 px-3 py-2 border border-gray-200 rounded-lg text-xs focus:outline-none focus:border-red-600 resize-none" />
+//               <label className="block text-sm font-bold text-gray-800 mb-2">
+//                 Product Description (বিবরণ)
+//               </label>
+//               <textarea 
+//                 name="description" 
+//                 value={product.description} 
+//                 onChange={handleChange} 
+//                 placeholder="এখানে জামার বিস্তারিত বিবরণ বড় করে লিখুন..."
+//                 className="w-full h-48 px-4 py-3 border border-gray-200 rounded-xl text-sm bg-white focus:outline-none focus:border-red-600 resize-y text-gray-800 leading-relaxed" 
+//               />
 //             </div>
+
+//             {/* Box 2: Disclaimer */}
 //             <div>
-//               <label className="block text-[11px] font-semibold text-gray-500 mb-1">Dupatta Details</label>
-//               <textarea name="dupattaDetails" value={product.dupattaDetails} onChange={handleChange} className="w-full h-20 px-3 py-2 border border-gray-200 rounded-lg text-xs focus:outline-none focus:border-red-600 resize-none" />
-//             </div>
-//             <div>
-//               <label className="block text-[11px] font-semibold text-gray-500 mb-1">Trouser Details</label>
-//               <textarea name="trouserDetails" value={product.trouserDetails} onChange={handleChange} className="w-full h-20 px-3 py-2 border border-gray-200 rounded-lg text-xs focus:outline-none focus:border-red-600 resize-none" />
+//               <label className="block text-sm font-bold text-gray-800 mb-2">
+//                 Disclaimer & Note (শর্তাবলী)
+//               </label>
+//               <textarea 
+//                 name="disclaimer" 
+//                 value={product.disclaimer} 
+//                 onChange={handleChange} 
+//                 placeholder="এখানে কালার বা ডেলিভারি সংক্রান্ত সতর্কতা/নোট লিখুন..."
+//                 className="w-full h-48 px-4 py-3 border border-gray-200 rounded-xl text-sm bg-white focus:outline-none focus:border-red-600 resize-y text-gray-800 leading-relaxed" 
+//               />
 //             </div>
 //           </div>
 //         </div>
 
-//         {/* Sizes */}
+//         {/* Sizes (আগের অরিজিনাল সাইজ সিলেকশন ঠিক রাখা হয়েছে) */}
 //         <div>
-//           <label className="block text-xs font-bold uppercase tracking-wider text-gray-600 mb-2">Available Sizes</label>
-//           <div className="flex flex-wrap gap-2">
-//             {["S 36-38, M 40-42, L 44-46,  XL 46-48"].map((size) => (
+//           <label className="block text-sm font-bold uppercase tracking-wider text-gray-700 mb-3">Available Sizes</label>
+//           <div className="flex flex-wrap gap-3">
+//             {availableSizes.map((size) => (
 //               <button
 //                 type="button"
 //                 key={size}
 //                 onClick={() => handleSizeChange(size)}
-//                 className={`px-4 py-2.5 text-xs font-semibold rounded-lg border transition-all duration-200 ${
+//                 className={`px-5 py-3 text-sm font-bold rounded-xl border transition-all duration-200 ${
 //                   product.sizes.includes(size)
-//                     ? "bg-red-50 text-red-600 border-red-600 font-bold"
-//                     : "bg-white text-gray-600 border-gray-200 hover:text-red-600 hover:bg-red-50/20"
+//                     ? "bg-red-600 text-white border-red-600 shadow-sm"
+//                     : "bg-white text-gray-700 border-gray-200 hover:text-red-600 hover:bg-red-50/20"
 //                 }`}
 //               >
 //                 {size}
@@ -319,17 +337,17 @@
 //         {/* Image Section */}
 //         <div className="space-y-6">
 //           <div>
-//             <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-2">
+//             <label className="block text-sm font-bold uppercase tracking-wider text-gray-700 mb-2">
 //               Main Cover Image (ইউজার চয়েসের জন্য মূল ছবি)
 //             </label>
 //             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
-//               <div className="border-2 border-dashed border-gray-200 rounded-xl p-4 text-center cursor-pointer bg-gray-50 hover:border-red-500 relative h-32 flex flex-col justify-center items-center">
+//               <div className="border-2 border-dashed border-gray-200 rounded-xl p-4 text-center cursor-pointer bg-gray-50 hover:border-red-500 relative h-36 flex flex-col justify-center items-center">
 //                 <input type="file" onChange={handleMainImageChange} className="absolute inset-0 opacity-0 cursor-pointer" accept="image/*" />
-//                 <span className="text-xs text-red-600 font-bold">Upload Main Image</span>
-//                 <span className="text-[10px] text-gray-400 mt-1">সিঙ্গেল মেইন ব্যানার ফাইল</span>
+//                 <span className="text-sm text-red-600 font-bold">Upload Main Image</span>
+//                 <span className="text-xs text-gray-400 mt-1">সিঙ্গেল মেইন ব্যানার ফাইল</span>
 //               </div>
 //               {product.mainImage && (
-//                 <div className="relative w-24 aspect-[3/4] rounded-lg overflow-hidden border border-red-200">
+//                 <div className="relative w-28 aspect-[3/4] rounded-lg overflow-hidden border border-red-200">
 //                   <img src={product.mainImage} alt="Main" className="w-full h-full object-cover" />
 //                 </div>
 //               )}
@@ -337,18 +355,18 @@
 //           </div>
 
 //           <div>
-//             <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-2">
+//             <label className="block text-sm font-bold uppercase tracking-wider text-gray-700 mb-2">
 //               Sub-Gallery Images (মেইন ইমেজের আন্ডারে ৩টি স্লাইডার ছবি)
 //             </label>
 //             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
 //               {[0, 1, 2].map((index) => (
 //                 <div key={index} className="border border-gray-200 rounded-xl p-3 bg-gray-50 flex flex-col items-center gap-2">
-//                   <span className="text-[11px] font-bold text-gray-500 uppercase">Gallery Image {index + 1}</span>
-//                   <div className="w-full relative h-24 border border-dashed border-gray-300 rounded-lg flex items-center justify-center bg-white overflow-hidden">
+//                   <span className="text-xs font-bold text-gray-600 uppercase">Gallery Image {index + 1}</span>
+//                   <div className="w-full relative h-28 border border-dashed border-gray-300 rounded-lg flex items-center justify-center bg-white overflow-hidden">
 //                     {product.galleryImages[index] ? (
 //                       <img src={product.galleryImages[index]} alt="Gallery" className="w-full h-full object-cover" />
 //                     ) : (
-//                       <span className="text-[10px] text-gray-400">No Image</span>
+//                       <span className="text-xs text-gray-400">No Image</span>
 //                     )}
 //                     <input 
 //                       type="file" 
@@ -367,7 +385,7 @@
 //         <button 
 //           type="submit" 
 //           disabled={loading}
-//           className={`w-full text-white font-bold text-xs py-4 px-4 rounded-xl transition-all duration-300 tracking-widest uppercase shadow-sm ${
+//           className={`w-full text-white font-bold text-sm py-4 px-4 rounded-xl transition-all duration-300 tracking-widest uppercase shadow-sm ${
 //             loading ? "bg-gray-400 cursor-not-allowed" : "bg-gray-900 hover:bg-red-600"
 //           }`}
 //         >
@@ -420,16 +438,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
 import React, { useState } from "react";
 import axios from "axios";
 
@@ -437,7 +445,10 @@ const AddProduct = () => {
   // লোডিং স্টেট
   const [loading, setLoading] = useState(false);
 
-  // স্টেট স্ট্রাকচার (আগের সব ব্যাকএন্ড ফিল্ড ঠিক রাখা হয়েছে)
+  // কাস্টম সাইজ ইনপুটের জন্য লোকাল স্টেট
+  const [customSize, setCustomSize] = useState("");
+
+  // স্টেট স্ট্রাকচার
   const [product, setProduct] = useState({
     title: "",
     sku: "",
@@ -445,9 +456,9 @@ const AddProduct = () => {
     category: "",
     subCategory: "",
     fabric: "",
-    description: "", // 👈 ১. বড় বিবরণ বক্স
-    disclaimer: "Product color may slightly vary due to photographic lighting sources or your monitor settings.", // 👈 ২. বড় ডিসক্লেইমার বক্স
-    sizes: [],
+    description: "",
+    disclaimer: "Product color may slightly vary due to photographic lighting sources or your monitor settings.",
+    sizes: [], // সিলেক্টেড বা কাস্টম সাইজ এখানে জমা হবে
     colors: [],
     inStock: true,
     mainImage: null,
@@ -466,12 +477,33 @@ const AddProduct = () => {
     }
   };
 
-  // সাইজ সিলেক্টর (আগের মতো ইন্ডিভিজুয়াল সাইজ অপশন)
+  // সাইজ অন/অফ করার হ্যান্ডলার
   const handleSizeChange = (size) => {
     const updatedSizes = product.sizes.includes(size)
       ? product.sizes.filter((s) => s !== size)
       : [...product.sizes, size];
     setProduct({ ...product, sizes: updatedSizes });
+  };
+
+  // 👈 কাস্টম সাইজ ইনপুট থেকে যোগ করার ফাংশন
+  const handleAddCustomSize = (e) => {
+    e.preventDefault();
+    const trimmedSize = customSize.trim();
+    if (trimmedSize && !product.sizes.includes(trimmedSize)) {
+      setProduct({
+        ...product,
+        sizes: [...product.sizes, trimmedSize],
+      });
+      setCustomSize(""); // ইনপুট বক্স ফাঁকা করে দেওয়া
+    }
+  };
+
+  // 👈 সাইজ রিমুভ করার ফাংশন
+  const handleRemoveSize = (sizeToRemove) => {
+    setProduct({
+      ...product,
+      sizes: product.sizes.filter((s) => s !== sizeToRemove),
+    });
   };
 
   // কালার সিলেক্টর ফিল্টার
@@ -572,7 +604,7 @@ const AddProduct = () => {
     { name: "Mustard", class: "bg-yellow-600" },
   ];
 
-  // প্রফেশনাল ও অরিজিনাল সাইজ লিস্ট
+  // রেডিমেড দ্রুত সিলেক্ট করার সাইজ লিস্ট
   const availableSizes = ["S 36-38", "M 40-42", "L 44-46", "XL 46-48"];
 
   return (
@@ -695,7 +727,7 @@ const AddProduct = () => {
           </div>
         </div>
 
-        {/* 🌟 2 Large Text Boxes for Description & Disclaimer (Text Size Increased) */}
+        {/* 🌟 Description & Disclaimer */}
         <div className="bg-gray-50 p-6 rounded-xl border border-gray-100 space-y-6">
           <h3 className="text-sm font-bold text-gray-800 uppercase tracking-wider">Dress Specification & Details</h3>
           
@@ -721,7 +753,7 @@ const AddProduct = () => {
                 name="description" 
                 value={product.description} 
                 onChange={handleChange} 
-                placeholder="এখানে জামার বিস্তারিত বিবরণ বড় করে লিখুন..."
+                placeholder="এখানে জামার বিস্তারিত বিবরণ বড় করে লিখুন..."
                 className="w-full h-48 px-4 py-3 border border-gray-200 rounded-xl text-sm bg-white focus:outline-none focus:border-red-600 resize-y text-gray-800 leading-relaxed" 
               />
             </div>
@@ -742,25 +774,84 @@ const AddProduct = () => {
           </div>
         </div>
 
-        {/* Sizes (আগের অরিজিনাল সাইজ সিলেকশন ঠিক রাখা হয়েছে) */}
-        <div>
-          <label className="block text-sm font-bold uppercase tracking-wider text-gray-700 mb-3">Available Sizes</label>
-          <div className="flex flex-wrap gap-3">
-            {availableSizes.map((size) => (
+        {/* 🌟 Update: Sizes Section (Default Buttons + Custom Input) */}
+        <div className="p-5 bg-gray-50 rounded-xl border border-gray-100 space-y-4">
+          <label className="block text-sm font-bold uppercase tracking-wider text-gray-700">
+            Available Sizes
+          </label>
+
+          {/* ১. দ্রুত সিলেক্ট করার ডিফল্ট সাইজ বাটন */}
+          <div>
+            <span className="text-xs text-gray-500 block mb-2 font-medium">Quick Select Sizes:</span>
+            <div className="flex flex-wrap gap-2">
+              {availableSizes.map((size) => (
+                <button
+                  type="button"
+                  key={size}
+                  onClick={() => handleSizeChange(size)}
+                  className={`px-4 py-2 text-xs font-bold rounded-lg border transition-all duration-200 ${
+                    product.sizes.includes(size)
+                      ? "bg-red-600 text-white border-red-600 shadow-sm"
+                      : "bg-white text-gray-700 border-gray-200 hover:text-red-600 hover:bg-red-50/20"
+                  }`}
+                >
+                  {size}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* ২. কাস্টম সাইজ যোগ করার খালি ইনপুট বক্স */}
+          <div>
+            <span className="text-xs text-gray-500 block mb-2 font-medium">Or Add Custom Size (ইচ্ছামতো সাইজ লিখুন):</span>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={customSize}
+                onChange={(e) => setCustomSize(e.target.value)}
+                placeholder="e.g. XXL 50-52 or Free Size or 38"
+                className="flex-1 px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-white focus:outline-none focus:border-red-600 text-gray-800"
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    handleAddCustomSize(e);
+                  }
+                }}
+              />
               <button
                 type="button"
-                key={size}
-                onClick={() => handleSizeChange(size)}
-                className={`px-5 py-3 text-sm font-bold rounded-xl border transition-all duration-200 ${
-                  product.sizes.includes(size)
-                    ? "bg-red-600 text-white border-red-600 shadow-sm"
-                    : "bg-white text-gray-700 border-gray-200 hover:text-red-600 hover:bg-red-50/20"
-                }`}
+                onClick={handleAddCustomSize}
+                className="px-5 py-2.5 bg-gray-800 hover:bg-red-600 text-white font-bold text-xs rounded-xl transition uppercase tracking-wider"
               >
-                {size}
+                + Add Size
               </button>
-            ))}
+            </div>
           </div>
+
+          {/* ৩. যুক্ত হওয়া সমস্ত সাইজ দেখানোর জায়গা (যেখানে ক্লিক করে বাটন কেটেও দেওয়া যাবে) */}
+          {product.sizes.length > 0 && (
+            <div className="pt-2">
+              <span className="text-xs text-gray-500 block mb-2 font-semibold">Selected Sizes ({product.sizes.length}):</span>
+              <div className="flex flex-wrap gap-2">
+                {product.sizes.map((s) => (
+                  <span
+                    key={s}
+                    className="inline-flex items-center gap-2 px-3 py-1.5 bg-red-100 text-red-700 font-bold text-xs rounded-lg border border-red-200"
+                  >
+                    {s}
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveSize(s)}
+                      className="text-red-500 hover:text-red-800 font-black text-sm leading-none ml-1"
+                      title="Remove size"
+                    >
+                      ×
+                    </button>
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Image Section */}
