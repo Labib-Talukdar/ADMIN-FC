@@ -475,6 +475,7 @@ const EditProduct = () => {
   const [title, setTitle] = useState("");
   const [sku, setSku] = useState("");
   const [price, setPrice] = useState("");
+  const [originalPrice, setOriginalPrice] = useState("");
   const [category, setCategory] = useState("");
   const [fabric, setFabric] = useState("");
   const [inStock, setInStock] = useState(true);
@@ -487,12 +488,16 @@ const EditProduct = () => {
   const availableSizes = ["S 36-38", "M 40-42", "L 44-46", "XL 46-48"];
   const availableColors = ["Red", "Emerald Green", "Maroon", "Navy Blue", "Black", "White"];
 
+  
+
+
   // ফর্মে ডাটা ফিল করার হেলপার ফাংশন
   const fillFormFields = (product) => {
     setCurrentProductId(product._id);
     setTitle(product.title || "");
     setSku(product.sku || "");
     setPrice(product.price || "");
+    setOriginalPrice(product.originalPrice || "");
     setCategory(product.category || "");
     setFabric(product.fabric || "");
     setInStock(product.inStock !== undefined ? product.inStock : true);
@@ -627,6 +632,7 @@ const EditProduct = () => {
     formData.append("title", title);
     formData.append("sku", sku);
     formData.append("price", price);
+    formData.append("originalPrice", originalPrice);
     formData.append("category", category);
     formData.append("fabric", fabric);
     formData.append("inStock", inStock);
@@ -714,12 +720,23 @@ const EditProduct = () => {
           {/* Price & Category */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1">Price (BDT)</label>
+              <label className="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1">Selling Price (BDT)</label>
               <input
                 type="number"
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
                 required
+                className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-teal-500 outline-none transition"
+              />
+            </div>
+            {/* original price */}
+            <div>
+              <label className="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1">Original Price (BDT)</label>
+              <input
+                type="number"
+                value={originalPrice}
+                onChange={(e) => setOriginalPrice(e.target.value)}
+                placeholder="Regular price (if discounted)"
                 className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-teal-500 outline-none transition"
               />
             </div>
