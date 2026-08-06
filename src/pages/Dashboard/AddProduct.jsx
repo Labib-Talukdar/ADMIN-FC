@@ -666,7 +666,7 @@ const AddProduct = () => {
             >
               <option value="">Choose Category</option>
               <option value="Organza Items">Organza Items</option>
-              <option value="Chiffon Items">Chiffon Items</option>
+              <option value="Chiffon Items">Sale Items</option>
               <option value="Gawn Collections">Gawn Collections</option>
               <option value="Chiffon 2pis">Chiffon 2pis</option>
               <option value="Mona Embroidery">Mona Embroidery</option>
